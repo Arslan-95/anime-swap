@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Theme: React.FC<Props> = ({ children }) => {
-  const [currentTheme] = React.useState(stylePalettes.yellow);
+  const [currentTheme] = React.useState(stylePalettes.main);
 
   return (
     <ThemeProvider theme={currentTheme}>
