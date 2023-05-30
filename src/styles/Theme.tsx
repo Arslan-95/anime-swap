@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './GlobalStyles';
-import StylePalette from '../features/theme/StylePalette';
+import StylePalette from '@features/theme/StylePalette';
 
 type Props = {
   children?: React.ReactNode;
