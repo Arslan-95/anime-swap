@@ -6,7 +6,7 @@ class Theme implements DefaultTheme {
   public fontSizes: IFontSizes = {
     xsmall: '12px',
     small: '18px',
-    medium: '28px',
+    medium: '32px',
     large: '50px',
     xlarge: '80px',
   };

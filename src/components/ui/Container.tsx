@@ -8,6 +8,7 @@ interface SContainerProps {
 
 interface Props extends SContainerProps {
   children?: React.ReactNode;
+  className?: string;
 }
 
 const SContainer = styled.div<SContainerProps>`
@@ -19,11 +20,12 @@ const SContainer = styled.div<SContainerProps>`
 
 const Container: React.FC<Props> = ({
   children,
+  className,
   maxWidth = '1320px',
   padding = '30px',
 }) => {
   return (
-    <SContainer padding={padding} maxWidth={maxWidth}>
+    <SContainer padding={padding} maxWidth={maxWidth} className={className}>
       {children}
     </SContainer>
   );
