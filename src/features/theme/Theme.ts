@@ -1,35 +1,7 @@
-type Color = string;
-type LinearGradient = string;
+import { DefaultTheme } from 'styled-components';
+import { IColors, IFontSizes } from './types';
 
-interface IColors {
-  dappBackground: Color | LinearGradient;
-  landingBackground: Color;
-  main: Color;
-  secondary: Color;
-  second: Color;
-  light: Color;
-  dark: Color;
-  defaultText: Color;
-  success: Color;
-  progress: Color;
-  successBackground: Color;
-  progressBackground: Color;
-}
-
-interface IFontSizes {
-  xsmall: string;
-  small: string;
-  medium: string;
-  large: string;
-  xlarge: string;
-}
-
-interface ITheme {
-  colors: IColors;
-  fontSizes: IFontSizes;
-}
-
-class Theme implements ITheme {
+class Theme implements DefaultTheme {
   public colors: IColors;
   public fontSizes: IFontSizes = {
     xsmall: '12px',

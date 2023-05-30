@@ -5,13 +5,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App: React.FC = () => {
   return (
-    <Theme>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Theme>
         <Routes>
-          <Route path="/swap" element={<Swap />} />
+          <Route path="dapp/swap" element={<Swap />} />
         </Routes>
-      </BrowserRouter>
-    </Theme>
+      </Theme>
+    </BrowserRouter>
   );
 };
 

@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ isDappPage: boolean }>`
   html, body {
     height: 100%;
   }
@@ -8,6 +8,10 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: Montserrat, sans-serif;
     padding: 0;
+    background: ${({ isDappPage, theme }) =>
+      isDappPage
+        ? theme.colors.dappBackground
+        : theme.colors.landingBackground};
   }
 
   *, *::before, *::after {
