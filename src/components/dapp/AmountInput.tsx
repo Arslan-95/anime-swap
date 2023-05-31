@@ -1,18 +1,10 @@
 import React from 'react';
 import { Input } from '@components/ui';
-import { InputProps, InputValue } from '@components/ui/types';
+import { InputValue } from '@components/ui/types';
 import _ from 'lodash';
+import { AmountInputProps } from './types';
 
-type Props = {
-  value: number | undefined;
-  onChange: (value: number | undefined) => void;
-};
-
-const AmountInput = ({
-  value,
-  onChange,
-  ...otherProps
-}: Props | InputProps) => {
+const AmountInput = ({ value, onChange, ...otherProps }: AmountInputProps) => {
   const valueInString = _.isNumber(value) ? String(value) : '';
   const [inputValue, setInputValue] = React.useState<InputValue>(valueInString);
 

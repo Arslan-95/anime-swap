@@ -1,7 +1,7 @@
 import React from 'react';
-import { AmountInput } from '@components/dapp';
-import { Box } from '@components/ui';
 import styled from 'styled-components';
+import { Box } from '@components/ui';
+import CurrencyAmount from '@components/dapp/CurrencyAmount';
 
 type Props = {
   children?: React.ReactNode;
@@ -19,17 +19,18 @@ const SwapBox = styled(Box)`
 const Swap: React.FC<Props> = () => {
   const [fromAmount, setFirstAmount] = React.useState<number>();
 
-  const handleFirstAmountChange = (value: number) => {
+  const handleFirstAmountChange = (value: number | undefined) => {
     setFirstAmount(value);
   };
 
   return (
     <SwapBox>
       <h2>SWAP</h2>
-      <AmountInput
+      <CurrencyAmount
         value={fromAmount}
         onChange={handleFirstAmountChange}
         placeholder="0.00"
+        currency="USDT"
       />
     </SwapBox>
   );
