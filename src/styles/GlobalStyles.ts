@@ -25,4 +25,9 @@ export const GlobalStyle = createGlobalStyle<{ isDappPage: boolean }>`
   input, button, textarea, select {
     font: inherit;
   }
+
+  button {
+    background: none;
+    border: none;
+  }
 `;

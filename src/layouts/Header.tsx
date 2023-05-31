@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '@assets/logo.png';
 import menuIcon from '@assets/header-menu.svg';
 import Container from '@/components/ui/Container';
+import * as PAGES from '@pages/PAGES';
 
 const SHeader = styled.header`
   width: 100%;
@@ -20,9 +22,10 @@ const CustomContainer = styled(Container)`
   justify-content: space-between;
 `;
 
-const SLogo = styled.div`
+const SLogo = styled(Link)`
   display: flex;
   align-items: center;
+  text-decoration: none;
 
   span {
     margin-left: 15px;
@@ -42,11 +45,13 @@ const Header: React.FC = () => {
     <SHeader>
       <SHeaderContent>
         <CustomContainer>
-          <SLogo>
+          <SLogo to={PAGES.DAPP}>
             <img src={logo} alt="logo" />
             <span>Anime Swap</span>
           </SLogo>
-          <img src={menuIcon} height="41px" alt="menu" loading="lazy" />
+          <button>
+            <img src={menuIcon} height="41px" alt="menu" loading="lazy" />
+          </button>
         </CustomContainer>
       </SHeaderContent>
     </SHeader>
