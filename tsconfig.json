@@ -28,7 +28,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@styles/*": ["./src/styles/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
