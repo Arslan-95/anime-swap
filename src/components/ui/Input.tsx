@@ -1,16 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { formatCurrencyAmount } from '@utils/formatCurrencyAmount';
 import styled from 'styled-components';
-
-export type InputValue = string | number | undefined;
-
-type Props = {
-  type?: 'number' | 'amount' | 'text';
-  placeholder?: string;
-  value?: InputValue;
-  onChange?: (value: InputValue) => void;
-  className?: string;
-};
+import { InputProps, InputValue } from './types';
 
 type InputMode =
   | 'text'
@@ -24,6 +15,7 @@ type InputMode =
   | undefined;
 
 const SInput = styled.input`
+  width: auto;
   background: none;
   border: none;
 
@@ -40,7 +32,7 @@ const SInput = styled.input`
   }
 `;
 
-const Input: React.FC<Props> = ({
+const Input: React.FC<InputProps> = ({
   type = 'amount',
   placeholder,
   value,
