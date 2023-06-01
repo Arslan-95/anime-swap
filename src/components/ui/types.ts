@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type InputValue = string | number | undefined;
 
 export interface InputProps {
@@ -6,4 +8,5 @@ export interface InputProps {
   value: InputValue;
   onChange: (value: InputValue) => void;
   className?: string;
+  indicator?: ReactNode;
 }
