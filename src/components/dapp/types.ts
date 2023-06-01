@@ -6,8 +6,8 @@ export interface AmountInputProps
   onChange: (value: number | undefined) => void;
 }
 
-export type Token = {
+export type IToken = {
   symbol: string;
 };
 
-export type OnTokenChange = (token: Token) => void;
+export type OnTokenChange = (token: IToken) => void;

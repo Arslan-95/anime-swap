@@ -1,17 +1,30 @@
 import styled from 'styled-components';
-import { AmountInput } from '.';
-import { AmountInputProps } from './types';
+import { AmountInput, CurrencySelect } from '.';
+import { AmountInputProps, OnTokenChange, IToken } from './types';
 
 interface CurrencyAmountProps extends AmountInputProps {
-  currency: string;
+  token: IToken;
+  onTokenChange: OnTokenChange;
 }
 
-const SCurrencyAmount = styled.div``;
+const SCurrencyAmount = styled.div`
+  display: flex;
+  width: 100%;
+`;
 
-const CurrencyAmount = ({ value, onChange }: CurrencyAmountProps) => {
+const CurrencyAmount = ({
+  value,
+  onChange,
+  token = { symbol: 'USDT' },
+  onTokenChange,
+}: CurrencyAmountProps) => {
   return (
     <SCurrencyAmount>
-      <AmountInput value={value} onChange={onChange} />
+      <AmountInput
+        value={value}
+        onChange={onChange}
+        indicator={<CurrencySelect token={token} onChange={onTokenChange} />}
+      />
     </SCurrencyAmount>
   );
 };

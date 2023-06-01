@@ -30,7 +30,10 @@ const Swap: React.FC<Props> = () => {
         value={fromAmount}
         onChange={handleFirstAmountChange}
         placeholder="0.00"
-        currency="USDT"
+        token={{ symbol: 'USDT' }}
+        onTokenChange={() => {
+          // ...
+        }}
       />
     </SwapBox>
   );
