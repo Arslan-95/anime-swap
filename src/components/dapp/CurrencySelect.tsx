@@ -1,10 +1,11 @@
-import { IToken, OnTokenChange } from './types';
+import { OnTokenChange } from './types';
 import usdtIcon from '@assets/usdt.svg';
 import selectAngleIcon from '@assets/icons/select-angle.svg';
 import styled from 'styled-components';
+import Token from '@utils/classes/Token';
 
 interface CurrencySelectProps {
-  token: IToken;
+  token: Token;
   onChange: OnTokenChange;
 }
 

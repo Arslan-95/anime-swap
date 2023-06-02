@@ -1,8 +1,8 @@
 import React from 'react';
 import { Input } from '@components/ui';
 import { InputValue } from '@components/ui/types';
-import _ from 'lodash';
 import { AmountInputProps } from './types';
+import _ from 'lodash';
 
 const AmountInput = ({ value, onChange, ...otherProps }: AmountInputProps) => {
   const valueInString = _.isNumber(value) ? String(value) : '';

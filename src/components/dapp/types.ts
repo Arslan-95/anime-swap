@@ -1,4 +1,5 @@
 import { InputProps } from '@components/ui/types';
+import Token from '@utils/classes/Token';
 
 export interface AmountInputProps
   extends Omit<InputProps, 'onChange' | 'value'> {
@@ -6,8 +7,4 @@ export interface AmountInputProps
   onChange: (value: number | undefined) => void;
 }
 
-export type IToken = {
-  symbol: string;
-};
-
-export type OnTokenChange = (token: IToken) => void;
+export type OnTokenChange = (token: Token) => void;

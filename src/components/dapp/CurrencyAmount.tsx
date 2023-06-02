@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { AmountInput, CurrencySelect } from '.';
-import { AmountInputProps, OnTokenChange, IToken } from './types';
+import { AmountInputProps, OnTokenChange } from './types';
+import Token from '@utils/classes/Token';
 
 interface CurrencyAmountProps extends AmountInputProps {
-  token: IToken;
+  token: Token;
   onTokenChange: OnTokenChange;
 }
 
