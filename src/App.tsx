@@ -1,16 +1,17 @@
 import React from 'react';
-import Swap from '@pages/Swap';
-import Theme from '@/styles/Theme';
-import Dapp from './layouts/Dapp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Swap from '@pages/Swap';
+import * as PAGES from '@pages/PAGES';
+import Theme from '@styles/Theme';
+import Dapp from '@layouts/Dapp';
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Theme>
         <Routes>
-          <Route path="dapp" element={<Dapp />}>
-            <Route path="swap" element={<Swap />} />
+          <Route path={PAGES.DAPP} element={<Dapp />}>
+            <Route path={PAGES.SWAP} element={<Swap />} />
           </Route>
         </Routes>
       </Theme>
