@@ -1,8 +1,10 @@
-import { OnTokenChange } from './types';
-import usdtIcon from '@assets/usdt.svg';
-import selectAngleIcon from '@assets/icons/select-angle.svg';
+import React from 'react';
 import styled from 'styled-components';
+import type { OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
+import { Modal } from '@components/ui';
+import selectAngleIcon from '@assets/icons/select-angle.svg';
+import usdtIcon from '@assets/usdt.svg';
 
 interface CurrencySelectProps {
   token: Token;
@@ -40,12 +42,21 @@ const SSelectAngleIcon = styled.img`
 `;
 
 const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
+  const [isModal, setIsModal] = React.useState(true);
+
+  const closeModal = () => {
+    setIsModal(false);
+  };
+
   return (
-    <SCurrencySelect>
-      <STokenIcon src={usdtIcon} alt={token.symbol} />
-      <STokenSymbol>{token.symbol}</STokenSymbol>
-      <SSelectAngleIcon src={selectAngleIcon} alt="select" />
-    </SCurrencySelect>
+    <>
+      <SCurrencySelect onClick={() => setIsModal(true)}>
+        <STokenIcon src={usdtIcon} alt={token.symbol} />
+        <STokenSymbol>{token.symbol}</STokenSymbol>
+        <SSelectAngleIcon src={selectAngleIcon} alt="select" />
+      </SCurrencySelect>
+      <Modal isOpen={isModal} onClose={closeModal} />
+    </>
   );
 };
 
