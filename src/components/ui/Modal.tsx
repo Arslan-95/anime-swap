@@ -121,6 +121,18 @@ const Modal = ({
     onClose();
   };
 
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('modal');
+    } else {
+      document.body.classList.remove('modal');
+    }
+
+    return () => {
+      document.body.classList.remove('modal');
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
