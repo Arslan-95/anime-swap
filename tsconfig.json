@@ -31,8 +31,9 @@
       "@components/*": ["./src/components/*"],
       "@store/*": ["./src/store/*"],
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["vite-plugin-svgr/client"]
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }],
 }
