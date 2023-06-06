@@ -29,6 +29,7 @@
       "@styles/*": ["./src/styles/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@components/*": ["./src/components/*"],
+      "@store/*": ["./src/store/*"],
       "@/*": ["./src/*"]
     }
   },
