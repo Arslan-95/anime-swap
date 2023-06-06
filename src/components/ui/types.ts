@@ -10,3 +10,5 @@ export interface InputProps {
   className?: string;
   indicator?: ReactNode;
 }
+
+export type { IModalProps } from './Modal.tsx';
