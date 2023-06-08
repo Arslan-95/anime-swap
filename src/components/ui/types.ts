@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 
-export type InputValue = string | number | undefined;
+export type InputValue = string;
 
 export interface InputProps {
   type?: 'number' | 'amount' | 'text';
   placeholder?: string;
-  value: InputValue;
+  value?: InputValue;
   onChange: (value: InputValue) => void;
   className?: string;
   indicator?: ReactNode;
