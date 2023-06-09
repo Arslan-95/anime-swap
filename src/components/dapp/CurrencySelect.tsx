@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import type { OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
-import { Modal } from '@components/ui';
 import selectAngleIcon from '@assets/icons/select-angle.svg';
 import usdtIcon from '@assets/usdt.svg';
+import SelectTokenModal from './SelectTokenModal';
 
 interface CurrencySelectProps {
   token: Token;
@@ -34,6 +34,7 @@ const STokenIcon = styled.img`
   object-fit: contain;
   height: 37px;
   width: 37px;
+  border-radius: 50%;
 `;
 
 const SSelectAngleIcon = styled.img`
@@ -51,11 +52,11 @@ const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
   return (
     <>
       <SCurrencySelect onClick={() => setIsModal(true)}>
-        <STokenIcon src={usdtIcon} alt={token.symbol} />
+        <STokenIcon src={token.logoURI} alt={token.symbol} />
         <STokenSymbol>{token.symbol}</STokenSymbol>
         <SSelectAngleIcon src={selectAngleIcon} alt="select" />
       </SCurrencySelect>
-      <Modal isOpen={isModal} onClose={closeModal} />
+      <SelectTokenModal isOpen={isModal} onClose={closeModal} />
     </>
   );
 };

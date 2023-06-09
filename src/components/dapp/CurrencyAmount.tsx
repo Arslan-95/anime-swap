@@ -16,7 +16,7 @@ const SCurrencyAmount = styled.div`
 const CurrencyAmount = ({
   value,
   onChange,
-  token = { symbol: 'USDT' },
+  token,
   onTokenChange,
 }: CurrencyAmountProps) => {
   return (

@@ -11,6 +11,7 @@ interface VisibilityVariants extends Variants {
 }
 
 export interface IModalProps {
+  title?: string;
   isOpen: boolean;
   isVisible?: boolean;
   onClose: () => void;
@@ -74,7 +75,9 @@ const STitle = styled.div`
   }
 `;
 
-const SCloseButton = styled(CustomButton)``;
+const SCloseButton = styled(CustomButton)`
+  margin-left: auto;
+`;
 const SCloseIcon = styled(CloseIcon)`
   ${SCloseButton}:hover & {
     --color: ${({ theme }) => theme.colors.main};
@@ -109,6 +112,7 @@ const contentAnimations: VisibilityVariants = {
 };
 
 const Modal = ({
+  title,
   onClose,
   isOpen,
   isVisible = true,
@@ -152,7 +156,7 @@ const Modal = ({
             style={{ width }}
           >
             <STitle>
-              <h3>Select a token</h3>
+              {title && <h3>{title}</h3>}
               <SCloseButton onClick={onClose}>
                 <SCloseIcon />
               </SCloseButton>
