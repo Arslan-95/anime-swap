@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box } from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
+import testToken from '@services/testToken';
 
 type Props = {
   children?: React.ReactNode;
@@ -30,7 +31,7 @@ const Swap: React.FC<Props> = () => {
         value={fromAmount}
         onChange={handleFirstAmountChange}
         placeholder="0.00"
-        token={{ symbol: 'USDT' }}
+        token={testToken}
         onTokenChange={() => {
           // ...
         }}
