@@ -1,7 +1,11 @@
 import type { QueryParams } from '@utils/types';
 import { Address } from 'wagmi';
 import axios from 'axios';
-import { I1InchSwapDataParams, I1InchSwapData } from '../types';
+import {
+  I1InchSwapDataParams,
+  I1InchSwapData,
+  I1InchTokensData,
+} from '../types';
 
 export const broadcastApiUrl = (chainId: number) =>
   'https://tx-gateway.1inch.io/v1.1/' + chainId + '/broadcast';
@@ -24,8 +28,8 @@ export const apiRequestUrl = (
 };
 
 export const checkAllowance = async (
-  tokenAddress: string,
-  walletAddress: `0x${string}`,
+  tokenAddress: Address,
+  walletAddress: Address,
   chainId: number
 ) => {
   const allowance = await axios(
@@ -80,4 +84,12 @@ export const getSwapData = async ({
   ).then((res) => res.data);
 
   return swapData;
+};
+
+export const getTokens = async (chainId: number): Promise<I1InchTokensData> => {
+  const tokens = await axios(apiRequestUrl('/tokens', {}, chainId)).then(
+    (res) => res.data.tokens
+  );
+
+  return tokens;
 };

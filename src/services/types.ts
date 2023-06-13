@@ -28,6 +28,10 @@ export interface I1InchSwapData {
   tx: I1InchTx;
 }
 
+export interface I1InchTokensData {
+  [key: string]: Token;
+}
+
 export type WagmiProviderSwapParams = Omit<
   I1InchSwapDataParams,
   'chainId' | 'fromAddress'
@@ -43,4 +47,6 @@ export interface IWagmiContext {
   swap: Swap;
   accountAddress: Address | undefined;
   chainId: number | undefined;
+  tokens: I1InchTokensData;
+  tokensList: Token[];
 }

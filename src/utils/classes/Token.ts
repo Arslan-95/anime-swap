@@ -1,12 +1,14 @@
 class Token {
-  constructor(
-    public name: string,
-    public symbol: string,
-    public address: string,
-    public chainId: number,
-    public decimals: number,
-    public logoURI: string
-  ) {}
+  constructor(details: {
+    name: string;
+    symbol: string;
+    address: string;
+    chainId?: number;
+    decimals: number;
+    logoURI: string;
+  }) {
+    Object.assign(this, details);
+  }
 }
 
 export default Token;

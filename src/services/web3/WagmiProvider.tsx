@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount, useNetwork, WagmiConfig } from 'wagmi';
 import * as inchApi from '@services/1inch/api';
 import wagmiConfig from './wagmiConfig';
@@ -6,9 +6,12 @@ import { sendTransaction } from '@wagmi/core';
 import {
   ApproveToken,
   GetAllowance,
+  I1InchTokensData,
   IWagmiContext,
   Swap,
 } from '@services/types';
+import Token from '@utils/classes/Token';
+import { DEFAULT_CHAIN } from '@services/config';
 
 interface IWagmiProviderProps {
   children?: React.ReactNode;
@@ -19,9 +22,12 @@ interface IWagmiProviderWrapperProps {
 }
 
 const WagmiContext = React.createContext<IWagmiContext | null>(null);
+
 const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const { address: accountAddress } = useAccount();
   const { chain } = useNetwork();
+  const [tokens, setTokens] = useState<I1InchTokensData>({});
+  const [tokensList, setTokensList] = useState<Token[]>([]);
 
   const approveToken: ApproveToken = async (tokenAddress, weiAmount) => {
     if (!accountAddress || !chain) return;
@@ -61,6 +67,18 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
     return tx;
   };
 
+  const updateTokens = async () => {
+    const updatedTokens = await inchApi.getTokens(chain?.id || DEFAULT_CHAIN);
+    const updatedTokensList = Object.values(updatedTokens);
+
+    setTokens(updatedTokens);
+    setTokensList(updatedTokensList);
+  };
+
+  useEffect(() => {
+    updateTokens();
+  }, [chain]);
+
   return (
     <WagmiContext.Provider
       value={{
@@ -69,6 +87,8 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
         swap,
         accountAddress,
         chainId: chain?.id,
+        tokens,
+        tokensList,
       }}
     >
       {children}
