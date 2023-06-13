@@ -23,4 +23,8 @@ export default defineConfig({
   server: {
     open: true,
   },
+  optimizeDeps: {
+    include: ['esm-dep > cjs-dep'],
+  },
+  define: { 'process.env': process.env },
 });

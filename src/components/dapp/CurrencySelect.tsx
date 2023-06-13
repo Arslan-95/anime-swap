@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import type { OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
 import selectAngleIcon from '@assets/icons/select-angle.svg';
-import usdtIcon from '@assets/usdt.svg';
 import SelectTokenModal from './SelectTokenModal';
 
 interface CurrencySelectProps {
@@ -42,8 +41,8 @@ const SSelectAngleIcon = styled.img`
   height: 13px;
 `;
 
-const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
-  const [isModal, setIsModal] = React.useState(true);
+const CurrencySelect = ({ token }: CurrencySelectProps) => {
+  const [isModal, setIsModal] = React.useState(false);
 
   const closeModal = () => {
     setIsModal(false);

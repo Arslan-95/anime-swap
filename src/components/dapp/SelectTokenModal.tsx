@@ -9,8 +9,8 @@ interface Props {
 }
 
 const SelectTokenModal = ({ isOpen, isVisible, onClose }: Props) => {
-  const [searchParams, setSearchParams] = React.useState('');
-  const [isPending, startTransition] = React.useTransition();
+  const [, setSearchParams] = React.useState('');
+  const [, startTransition] = React.useTransition();
 
   const handleSearch = (value: string) => {
     startTransition(() => {
