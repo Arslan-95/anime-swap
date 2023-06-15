@@ -21,7 +21,7 @@ interface IWagmiProviderWrapperProps {
   children?: React.ReactNode;
 }
 
-const WagmiContext = React.createContext<IWagmiContext | null>(null);
+export const WagmiContext = React.createContext<IWagmiContext | null>(null);
 
 const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const { address: accountAddress } = useAccount();

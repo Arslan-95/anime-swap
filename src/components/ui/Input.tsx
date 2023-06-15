@@ -50,13 +50,19 @@ const SInput = styled.input`
   }
 `;
 
+const SIndicatorWrapper = styled.div`
+  pointer-events: all;
+`;
+
 const Input: React.FC<InputProps> = ({
   type = 'amount',
   placeholder,
   value,
   onChange,
+  onFocus,
   className,
   indicator,
+  locked,
 }) => {
   const [focused, setFocused] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -85,13 +91,13 @@ const Input: React.FC<InputProps> = ({
     const newValue = getFineValue(e.target.value);
     e.target.value = newValue;
 
-    if (onChange) {
-      onChange(newValue);
-    }
+    onChange && onChange(newValue);
   };
 
   const handleFocus = () => {
     setFocused(true);
+
+    onFocus && onFocus();
   };
 
   const handleBlur = () => {
@@ -119,8 +125,9 @@ const Input: React.FC<InputProps> = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         ref={inputRef}
+        disabled={locked}
       />
-      <div ref={indicatorWrapper}>{indicator}</div>
+      <SIndicatorWrapper ref={indicatorWrapper}>{indicator}</SIndicatorWrapper>
     </SInputWrapper>
   );
 };

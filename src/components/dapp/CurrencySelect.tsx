@@ -4,13 +4,15 @@ import type { OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
 import selectAngleIcon from '@assets/icons/select-angle.svg';
 import SelectTokenModal from './SelectTokenModal';
+import { CustomButton } from '@components/ui';
+import TokenIcon from './TokenIcon';
 
 interface CurrencySelectProps {
-  token: Token;
+  token: Token | null;
   onChange: OnTokenChange;
 }
 
-const SCurrencySelect = styled.div`
+const SCurrencySelect = styled(CustomButton)`
   display: flex;
   align-items: center;
   user-select: none;
@@ -29,19 +31,12 @@ const STokenSymbol = styled.span`
   margin: 0 4px 0 10px;
 `;
 
-const STokenIcon = styled.img`
-  object-fit: contain;
-  height: 37px;
-  width: 37px;
-  border-radius: 50%;
-`;
-
 const SSelectAngleIcon = styled.img`
   width: 13px;
   height: 13px;
 `;
 
-const CurrencySelect = ({ token }: CurrencySelectProps) => {
+const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
   const [isModal, setIsModal] = React.useState(false);
 
   const closeModal = () => {
@@ -51,11 +46,25 @@ const CurrencySelect = ({ token }: CurrencySelectProps) => {
   return (
     <>
       <SCurrencySelect onClick={() => setIsModal(true)}>
-        <STokenIcon src={token.logoURI} alt={token.symbol} />
-        <STokenSymbol>{token.symbol}</STokenSymbol>
+        {token ? (
+          <>
+            <TokenIcon src={token.logoURI} />
+            <STokenSymbol>{token.symbol}</STokenSymbol>
+          </>
+        ) : (
+          <>
+            <TokenIcon />
+            <STokenSymbol>Empty</STokenSymbol>
+          </>
+        )}
+
         <SSelectAngleIcon src={selectAngleIcon} alt="select" />
       </SCurrencySelect>
-      <SelectTokenModal isOpen={isModal} onClose={closeModal} />
+      <SelectTokenModal
+        onChange={onChange}
+        isOpen={isModal}
+        onClose={closeModal}
+      />
     </>
   );
 };

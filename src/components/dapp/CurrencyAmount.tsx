@@ -4,8 +4,9 @@ import { AmountInputProps, OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
 
 interface CurrencyAmountProps extends AmountInputProps {
-  token: Token;
+  token: Token | null;
   onTokenChange: OnTokenChange;
+  inputLocked?: boolean;
 }
 
 const SCurrencyAmount = styled.div`
@@ -18,6 +19,8 @@ const CurrencyAmount = ({
   onChange,
   token,
   onTokenChange,
+  onFocus,
+  inputLocked,
 }: CurrencyAmountProps) => {
   return (
     <SCurrencyAmount>
@@ -25,6 +28,8 @@ const CurrencyAmount = ({
         value={value}
         onChange={onChange}
         indicator={<CurrencySelect token={token} onChange={onTokenChange} />}
+        onFocus={onFocus}
+        locked={inputLocked}
       />
     </SCurrencyAmount>
   );
