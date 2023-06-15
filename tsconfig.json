@@ -29,7 +29,7 @@
       "@styles/*": ["./src/styles/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@components/*": ["./src/components/*"],
-      "@store/*": ["./src/store/*"],
+      "@services/*": ["./src/services/*"],
       "@/*": ["./src/*"]
     },
     "types": ["vite-plugin-svgr/client"]
