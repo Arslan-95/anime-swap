@@ -1,11 +1,20 @@
-class Token {
+interface ITokenDetails {
+  name: string;
+  symbol: string;
+  address: string;
+  decimals: number;
+  logoURI: string;
+  chainId?: number;
+}
+
+class Token implements ITokenDetails {
   constructor(
-    // public name: string,
+    public name: string,
     public symbol: string,
-    // public address: string,
-    // public chainId: number,
-    // public decimals: number,
-    // public logoURI: string
+    public address: string,
+    public decimals: number,
+    public logoURI: string,
+    public chainId: number
   ) {}
 }
 

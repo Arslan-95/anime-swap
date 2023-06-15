@@ -11,7 +11,7 @@ const AmountInput = ({ value, onChange, ...otherProps }: AmountInputProps) => {
   React.useEffect(() => {
     if (valueInString === inputValue) return;
 
-    onChange(inputValue ? Number(inputValue) : undefined);
+    onChange && onChange(inputValue ? Number(inputValue) : undefined);
   }, [inputValue]);
 
   React.useEffect(() => {
