@@ -38,8 +38,8 @@ export type WagmiProviderSwapParams = Omit<
 >;
 
 export type ApproveToken = (tokenAddress: Address, weiAmount: string) => void;
-export type GetAllowance = (tokenAddress: Address) => void;
-export type Swap = (params: WagmiProviderSwapParams) => void;
+export type GetAllowance = (tokenAddress: Address) => Promise<string>;
+export type Swap = (params: I1InchSwapData) => void;
 
 export interface IWagmiContext {
   approveToken: ApproveToken;

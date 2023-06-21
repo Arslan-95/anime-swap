@@ -27,6 +27,7 @@ const Swap: React.FC<Props> = () => {
     handleFocusFrom,
     handleFromTokenChange,
     handleToTokenChange,
+    error,
   } = useSwap();
 
   return (
@@ -48,6 +49,7 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleToTokenChange}
         inputLocked
       />
+      {error && <div>{error}</div>}
     </SwapBox>
   );
 };
