@@ -34,15 +34,13 @@ const useSwap = () => {
   const handleAmountChange: HandleAmountChange = async (amount) => {
     dispatch(actions.setFromAmount(amount));
   };
-
   const handleToAmountChange: HandleAmountChange = async (amount) => {
-    dispatch(actions.setFromAmount(amount));
+    dispatch(actions.setToAmount(amount));
   };
 
   const handleFocusFrom = () => {
     dispatch(actions.setFocus('from'));
   };
-
   const handleFocusTo = () => {
     dispatch(actions.setFocus('to'));
   };
