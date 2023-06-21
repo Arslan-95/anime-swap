@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { WagmiContext } from '@services/web3/WagmiProvider';
 import { IWagmiContext, WagmiProviderSwapParams } from '@services/types';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
@@ -8,6 +8,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import { getSwapData } from '@services/1inch/api';
 import { AxiosError } from 'axios';
 import { formatEther, parseEther } from 'viem';
+import { LOADING_STATUS } from '@utils/types';
 
 type HandleTokenChange = (token: Token | null) => void;
 type HandleAmountChange = (amount: string) => void;
@@ -16,13 +17,27 @@ let transactionUpdateTimeout: NodeJS.Timeout;
 
 const useSwap = () => {
   const dispatch = useAppDispatch();
-  const { fromToken, fromAmount, toToken, toAmount, focus, error, allowance } =
-    useAppSelector((state) => state.swap);
+  const {
+    fromToken,
+    fromAmount,
+    toToken,
+    toAmount,
+    focus,
+    allowance,
+    transaction,
+    loading,
+    error,
+  } = useAppSelector((state) => state.swap);
   const { address: accountAddress } = useAccount();
   const { chain } = useNetwork();
-  const { tokensList, getAllowance } = useContext(
-    WagmiContext
-  ) as IWagmiContext;
+  const context = useContext(WagmiContext) as IWagmiContext;
+  const { tokensList } = context;
+
+  const fromAmountWei = useMemo(() => {
+    return parseEther(`${Number(fromAmount)}`, 'wei').toString();
+  }, [fromAmount]);
+
+  const isApproved = allowance && Number(allowance) >= Number(fromAmountWei);
 
   const handleFromTokenChange: HandleTokenChange = (token) => {
     dispatch(actions.setFromToken(token));
@@ -45,11 +60,25 @@ const useSwap = () => {
     dispatch(actions.setFocus('to'));
   };
 
+  const updateAllowance = async () => {
+    if (!fromToken) {
+      dispatch(actions.setAllowance('0'));
+      return '0';
+    }
+
+    const newAllowance = await context.getAllowance(fromToken.address);
+    dispatch(actions.setAllowance(newAllowance));
+
+    return newAllowance;
+  };
+
   const updateTransaction = async (params: WagmiProviderSwapParams) => {
     if (!accountAddress || !chain) return null;
 
     // Clear error.
     dispatch(actions.setError(null));
+    dispatch(actions.setTransaction(null));
+    dispatch(actions.setLoading(LOADING_STATUS.LOADING));
 
     try {
       if (!fromAmount) {
@@ -58,8 +87,8 @@ const useSwap = () => {
       }
 
       // Update allowance.
-      const newAllowance = await getAllowance(params.fromTokenAddress);
-      dispatch(actions.setAllowance(newAllowance));
+      const newAllowance = await updateAllowance();
+      if (Number(newAllowance) < Number(fromAmountWei)) return;
 
       const swapData = await getSwapData({
         ...params,
@@ -71,20 +100,37 @@ const useSwap = () => {
         BigInt(swapData.toTokenAmount),
         'wei'
       );
-      handleToAmountChange(toTokenAmountInEther);
 
-      return swapData;
+      // Update amount and transaction.
+      handleToAmountChange(toTokenAmountInEther);
+      dispatch(actions.setTransaction(swapData));
+      dispatch(actions.setLoading(LOADING_STATUS.SUCCESSED));
     } catch (error) {
       console.log('[updateSwapData]', error);
 
       handleToAmountChange('');
 
       // Update error message.
-      if (!(error instanceof AxiosError)) return;
+      if (error instanceof AxiosError) {
+        const errorMessage = error.response?.data?.description;
+        dispatch(actions.setError(errorMessage || ''));
+      }
 
-      const errorMessage = error.response?.data?.description;
-      dispatch(actions.setError(errorMessage || ''));
+      dispatch(actions.setLoading(LOADING_STATUS.FAILED));
     }
+  };
+
+  const swap = async () => {
+    if (!transaction) return;
+
+    await context.swap(transaction);
+  };
+
+  const approve = async () => {
+    if (!fromToken) return;
+
+    await context.approveToken(fromToken.address, fromAmountWei);
+    await updateAllowance();
   };
 
   useEffect(() => {
@@ -96,16 +142,14 @@ const useSwap = () => {
     if (!fromToken || !toToken) return;
 
     clearTimeout(transactionUpdateTimeout);
-    transactionUpdateTimeout = setTimeout(
-      () =>
-        updateTransaction({
-          fromTokenAddress: fromToken.address,
-          toTokenAddress: toToken.address,
-          weiAmount: parseEther(`${Number(fromAmount)}`, 'wei').toString(),
-          slippage: 1,
-        }),
-      1000
-    );
+    transactionUpdateTimeout = setTimeout(() => {
+      updateTransaction({
+        fromTokenAddress: fromToken.address,
+        toTokenAddress: toToken.address,
+        weiAmount: fromAmountWei,
+        slippage: 1,
+      });
+    }, 1000);
   }, [fromToken, toToken, fromAmount]);
 
   return {
@@ -119,6 +163,11 @@ const useSwap = () => {
     handleToTokenChange,
     handleFocusFrom,
     handleFocusTo,
+    isApproved,
+    transaction,
+    swap,
+    approve,
+    loading,
     error,
   };
 };

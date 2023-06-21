@@ -23,12 +23,17 @@ const Swap: React.FC<Props> = () => {
     toToken,
     fromAmount,
     toAmount,
+    isApproved,
     handleAmountChange,
     handleFocusFrom,
     handleFromTokenChange,
     handleToTokenChange,
-    error,
+    transaction,
+    swap,
+    approve,
   } = useSwap();
+
+  const showApproveButton = !isApproved && fromAmount;
 
   return (
     <SwapBox>
@@ -49,7 +54,12 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleToTokenChange}
         inputLocked
       />
-      {error && <div>{error}</div>}
+      {showApproveButton && <button onClick={approve}>Approve</button>}
+      {!showApproveButton && (
+        <button disabled={!transaction} onClick={swap}>
+          Swap
+        </button>
+      )}
     </SwapBox>
   );
 };
