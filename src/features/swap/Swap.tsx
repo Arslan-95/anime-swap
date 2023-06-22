@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Button, CustomButton } from '@components/ui';
+import { Box, Button, CustomButton, UnderlinedButton } from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
 import useSwap from './useSwap';
 import { ReactComponent as SwitchIcon } from '@assets/icons/switch-kunai.svg';
@@ -25,6 +25,16 @@ const SwitchButton = styled(CustomButton)`
   margin: 32px auto;
 `;
 
+const SUnderlinedButton = styled(UnderlinedButton)`
+  margin: 0 0 10px auto;
+`;
+
+const STokenPrice = styled.span`
+  margin: 18px 0 0 auto;
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  font-weight: 500;
+`;
+
 const ActionButton = styled(Button)`
   width: 180px;
   margin: 30px auto 0;
@@ -46,6 +56,7 @@ const Swap: React.FC<Props> = () => {
     loading,
     approve,
     switchTokens,
+    swapRate,
   } = useSwap();
 
   const showApproveButton = !isApproved && fromAmount;
@@ -53,6 +64,7 @@ const Swap: React.FC<Props> = () => {
   return (
     <SwapBox>
       <h2>SWAP</h2>
+      <SUnderlinedButton size="xsmall">Balance: 200 USDT</SUnderlinedButton>
       <CurrencyAmount
         value={fromAmount}
         onChange={handleAmountChange}
@@ -71,6 +83,9 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleToTokenChange}
         inputLocked
       />
+      <STokenPrice>
+        {Number(swapRate.toFixed(5))} {fromToken?.symbol} per {toToken?.symbol}
+      </STokenPrice>
       {showApproveButton ? (
         <ActionButton
           onClick={approve}

@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle<{ isDappPage: boolean }>`
   html, body {
-    height: 100%;
+    min-height: 100%;
   }
 
   body {

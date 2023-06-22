@@ -27,6 +27,7 @@ const useSwap = () => {
     transaction,
     loading,
     error,
+    swapRate,
   } = useAppSelector((state) => state.swap);
   const context = useContext(WagmiContext) as IWagmiContext;
   const { tokensList } = context;
@@ -195,6 +196,7 @@ const useSwap = () => {
     approve,
     loading,
     switchTokens,
+    swapRate,
     error,
   };
 };
