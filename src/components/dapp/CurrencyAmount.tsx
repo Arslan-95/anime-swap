@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { AmountInput, CurrencySelect } from '.';
-import { AmountInputProps, OnTokenChange } from './types';
+import type { OnTokenChange } from './types';
+import type { InputProps } from '@components/ui/types';
 import Token from '@utils/classes/Token';
 
-interface CurrencyAmountProps extends AmountInputProps {
+interface CurrencyAmountProps extends InputProps {
   token: Token | null;
   onTokenChange: OnTokenChange;
   inputLocked?: boolean;

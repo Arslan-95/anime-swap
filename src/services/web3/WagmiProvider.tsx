@@ -32,47 +32,60 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const approveToken: ApproveToken = async (tokenAddress, weiAmount) => {
     if (!accountAddress || !chain) return;
 
-    const transaction = await inchApi.buildTxForApproveTradeWithRouter(
-      tokenAddress,
-      weiAmount,
-      chain.id
-    );
+    try {
+      const transaction = await inchApi.buildTxForApproveTradeWithRouter(
+        tokenAddress,
+        weiAmount,
+        chain.id
+      );
 
-    const tx = await sendTransaction(transaction);
-    return tx;
+      const tx = await sendTransaction(transaction);
+      return tx;
+    } catch (error) {
+      console.log('[approveToken]', error);
+    }
   };
 
   const getAllowance: GetAllowance = async (tokenAddress) => {
-    if (!accountAddress || !chain) return;
+    if (!accountAddress || !chain) return '0';
 
-    const allowance = await inchApi.checkAllowance(
-      tokenAddress,
-      accountAddress,
-      chain.id
-    );
+    try {
+      const allowance = await inchApi.checkAllowance(
+        tokenAddress,
+        accountAddress,
+        chain.id
+      );
 
-    return allowance;
+      return allowance;
+    } catch (error) {
+      console.log('[getAllowance]', error);
+
+      return '0';
+    }
   };
 
-  const swap: Swap = async (params) => {
+  const swap: Swap = async (transaction) => {
     if (!accountAddress || !chain) return;
 
-    const transaction = await inchApi.getSwapData({
-      ...params,
-      chainId: chain.id,
-      fromAddress: accountAddress,
-    });
+    try {
+      const tx = await sendTransaction(transaction.tx);
 
-    const tx = await sendTransaction(transaction.tx);
-    return tx;
+      return tx;
+    } catch (error) {
+      console.log('[swap]', error);
+    }
   };
 
   const updateTokens = async () => {
-    const updatedTokens = await inchApi.getTokens(chain?.id || DEFAULT_CHAIN);
-    const updatedTokensList = Object.values(updatedTokens);
+    try {
+      const updatedTokens = await inchApi.getTokens(chain?.id || DEFAULT_CHAIN);
+      const updatedTokensList = Object.values(updatedTokens);
 
-    setTokens(updatedTokens);
-    setTokensList(updatedTokensList);
+      setTokens(updatedTokens);
+      setTokensList(updatedTokensList);
+    } catch (error) {
+      console.log('[updateTokens]', error);
+    }
   };
 
   useEffect(() => {

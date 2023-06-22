@@ -1,21 +1,31 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { I1InchSwapData } from '@services/types';
 import Token from '@utils/classes/Token';
+import { LOADING_STATUS } from '@utils/types';
 
 type Focus = 'from' | 'to';
 interface ISwapState {
   fromToken: Token | null;
   toToken: Token | null;
-  fromAmount: number | undefined;
-  toAmount: number | undefined;
+  fromAmount: string;
+  toAmount: string;
+  allowance?: string;
   focus: Focus;
+  transaction: I1InchSwapData | null;
+  loading: LOADING_STATUS;
+  error?: string | null;
 }
 
 const initialState: ISwapState = {
   fromToken: null,
   toToken: null,
-  fromAmount: undefined,
-  toAmount: undefined,
+  fromAmount: '',
+  toAmount: '',
+  allowance: undefined,
   focus: 'from',
+  transaction: null,
+  loading: LOADING_STATUS.IDLE,
+  error: null,
 };
 
 const swapSlice = createSlice({
@@ -28,14 +38,26 @@ const swapSlice = createSlice({
     setToToken: (state, action: PayloadAction<Token | null>) => {
       state.toToken = action.payload;
     },
-    setFromAmount: (state, action: PayloadAction<number | undefined>) => {
+    setFromAmount: (state, action: PayloadAction<string>) => {
       state.fromAmount = action.payload;
     },
-    setToAmount: (state, action: PayloadAction<number | undefined>) => {
+    setToAmount: (state, action: PayloadAction<string>) => {
       state.toAmount = action.payload;
+    },
+    setAllowance: (state, action: PayloadAction<string | undefined>) => {
+      state.allowance = action.payload;
     },
     setFocus: (state, action: PayloadAction<Focus>) => {
       state.focus = action.payload;
+    },
+    setTransaction: (state, action: PayloadAction<I1InchSwapData | null>) => {
+      state.transaction = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<LOADING_STATUS>) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
     },
   },
 });
@@ -45,7 +67,11 @@ export const {
   setFromAmount,
   setToToken,
   setToAmount,
+  setAllowance,
   setFocus,
+  setTransaction,
+  setLoading,
+  setError,
 } = swapSlice.actions;
 
 export default swapSlice.reducer;
