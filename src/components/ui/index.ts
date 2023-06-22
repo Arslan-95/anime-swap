@@ -4,3 +4,4 @@ export { default as Input } from './Input';
 export { default as CustomButton } from './CustomButton';
 export { default as Modal } from './Modal';
 export { default as Search } from './Search';
+export { default as Button } from './Button';

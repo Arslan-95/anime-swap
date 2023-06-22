@@ -1,5 +1,6 @@
 import Token from '@utils/classes/Token';
 import { Address } from 'wagmi';
+import { SendTransactionResult } from '@wagmi/core';
 
 export interface I1InchTx {
   data: Address;
@@ -37,9 +38,14 @@ export type WagmiProviderSwapParams = Omit<
   'chainId' | 'fromAddress'
 >;
 
-export type ApproveToken = (tokenAddress: Address, weiAmount: string) => void;
-export type GetAllowance = (tokenAddress: Address) => void;
-export type Swap = (params: WagmiProviderSwapParams) => void;
+export type ApproveToken = (
+  tokenAddress: Address,
+  weiAmount: string
+) => Promise<SendTransactionResult | undefined>;
+export type GetAllowance = (tokenAddress: Address) => Promise<string>;
+export type Swap = (
+  params: I1InchSwapData
+) => Promise<SendTransactionResult | undefined>;
 
 export interface IWagmiContext {
   approveToken: ApproveToken;
