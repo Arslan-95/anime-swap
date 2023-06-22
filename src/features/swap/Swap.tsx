@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box } from '@components/ui';
+import { Box, Button } from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
 import useSwap from './useSwap';
 
@@ -9,12 +9,19 @@ type Props = {
 };
 
 const SwapBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 500px;
 
   h2 {
     text-align: center;
   }
+`;
+
+const ActionButton = styled(Button)`
+  width: 180px;
+  margin: 30px auto 0;
 `;
 
 const Swap: React.FC<Props> = () => {
@@ -54,11 +61,12 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleToTokenChange}
         inputLocked
       />
-      {showApproveButton && <button onClick={approve}>Approve</button>}
-      {!showApproveButton && (
-        <button disabled={!transaction} onClick={swap}>
+      {showApproveButton ? (
+        <ActionButton onClick={approve}>Approve</ActionButton>
+      ) : (
+        <ActionButton disabled={!transaction} onClick={swap}>
           Swap
-        </button>
+        </ActionButton>
       )}
     </SwapBox>
   );
