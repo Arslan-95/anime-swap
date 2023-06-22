@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { I1InchSwapData } from '@services/types';
+import { I1InchQuote } from '@services/types';
 import Token from '@utils/classes/Token';
 import { LOADING_STATUS } from '@utils/types';
 
@@ -11,7 +11,7 @@ interface ISwapState {
   toAmount: string;
   allowance?: string;
   focus: Focus;
-  transaction: I1InchSwapData | null;
+  transaction: I1InchQuote | null;
   loading: LOADING_STATUS;
   error?: string | null;
 }
@@ -50,7 +50,7 @@ const swapSlice = createSlice({
     setFocus: (state, action: PayloadAction<Focus>) => {
       state.focus = action.payload;
     },
-    setTransaction: (state, action: PayloadAction<I1InchSwapData | null>) => {
+    setTransaction: (state, action: PayloadAction<I1InchQuote | null>) => {
       state.transaction = action.payload;
     },
     setLoading: (state, action: PayloadAction<LOADING_STATUS>) => {

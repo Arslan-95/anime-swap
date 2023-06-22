@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/index';
 import * as actions from './swapSlice';
 import Token from '@utils/classes/Token';
 import { useNetwork } from 'wagmi';
-import { getSwapData } from '@services/1inch/api';
+import { getQuote, getSwapData } from '@services/1inch/api';
 import { AxiosError } from 'axios';
 import { formatEther, parseEther } from 'viem';
 import { LOADING_STATUS } from '@utils/types';
@@ -59,16 +59,18 @@ const useSwap = () => {
     dispatch(actions.setFocus('to'));
   };
 
+  const handleLoadingStatus = (status: LOADING_STATUS) => {
+    dispatch(actions.setLoading(status));
+  };
+
   const updateAllowance = async () => {
     if (!fromToken) {
-      dispatch(actions.setAllowance('0'));
-      return '0';
+      dispatch(actions.setAllowance('999999999'));
+      return;
     }
 
     const newAllowance = await context.getAllowance(fromToken.address);
     dispatch(actions.setAllowance(newAllowance));
-
-    return newAllowance;
   };
 
   const updateTransaction = async (params: WagmiProviderSwapParams) => {
@@ -77,7 +79,7 @@ const useSwap = () => {
     // Clear error.
     dispatch(actions.setError(null));
     dispatch(actions.setTransaction(null));
-    dispatch(actions.setLoading(LOADING_STATUS.LOADING));
+    handleLoadingStatus(LOADING_STATUS.LOADING);
 
     try {
       if (!fromAmount) {
@@ -85,29 +87,20 @@ const useSwap = () => {
         return;
       }
 
-      // Update allowance.
-      const newAllowance = await updateAllowance();
-      if (Number(newAllowance) < Number(fromAmountWei)) {
-        dispatch(actions.setLoading(LOADING_STATUS.FAILED));
-
-        return;
-      }
-
-      const swapData = await getSwapData({
+      const quote = await getQuote({
         ...params,
         chainId: chain.id,
-        fromAddress: context.accountAddress,
       });
 
       const toTokenAmountInEther = formatEther(
-        BigInt(swapData.toTokenAmount),
+        BigInt(quote.toTokenAmount),
         'wei'
       );
 
       // Update amount and transaction.
       handleToAmountChange(toTokenAmountInEther);
-      dispatch(actions.setTransaction(swapData));
-      dispatch(actions.setLoading(LOADING_STATUS.SUCCESSED));
+      dispatch(actions.setTransaction(quote));
+      handleLoadingStatus(LOADING_STATUS.SUCCESSED);
     } catch (error) {
       console.log('[updateSwapData]', error);
 
@@ -119,7 +112,7 @@ const useSwap = () => {
         dispatch(actions.setError(errorMessage || ''));
       }
 
-      dispatch(actions.setLoading(LOADING_STATUS.FAILED));
+      handleLoadingStatus(LOADING_STATUS.FAILED);
     }
   };
 
@@ -130,9 +123,28 @@ const useSwap = () => {
   };
 
   const swap = async () => {
-    if (!transaction) return;
+    if (!fromToken || !toToken || !chain || !context.accountAddress) return;
 
-    await context.swap(transaction);
+    try {
+      dispatch(actions.setLoading(LOADING_STATUS.LOADING));
+
+      // Get Transaction data
+      const swapData = await getSwapData({
+        fromTokenAddress: fromToken.address,
+        toTokenAddress: toToken.address,
+        weiAmount: fromAmountWei,
+        slippage: 1,
+        chainId: chain.id,
+        fromAddress: context.accountAddress,
+      });
+
+      // Swap
+      await context.swap(swapData);
+      dispatch(actions.setLoading(LOADING_STATUS.SUCCESSED));
+    } catch (error) {
+      console.log('[swap]', error);
+      dispatch(actions.setLoading(LOADING_STATUS.FAILED));
+    }
   };
 
   const approve = async () => {
@@ -141,6 +153,11 @@ const useSwap = () => {
     await context.approveToken(fromToken.address, fromAmountWei);
     await updateAllowance();
   };
+
+  useEffect(() => {
+    // Update allowance.
+    updateAllowance();
+  }, [fromToken]);
 
   useEffect(() => {
     handleFromTokenChange(tokensList[0] || null);
