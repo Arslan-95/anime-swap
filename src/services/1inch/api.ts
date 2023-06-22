@@ -59,6 +59,26 @@ export const buildTxForApproveTradeWithRouter = async (
   return transaction;
 };
 
+// export const getQuote = async ({
+//   fromTokenAddress,
+//   toTokenAddress,
+//   fromAddress,
+//   weiAmount,
+//   chainId,
+// }) => {
+//   const quoteParams = {
+//     fromTokenAddress,
+//     toTokenAddress,
+//     amount: weiAmount,
+//   };
+
+//   const quote = await axios(apiRequestUrl('/quote', quoteParams, chainId)).then(
+//     (res) => res.data
+//   );
+
+//   console.log(quote)
+// };
+
 export const getSwapData = async ({
   fromTokenAddress,
   toTokenAddress,

@@ -4,7 +4,7 @@ import { IWagmiContext, WagmiProviderSwapParams } from '@services/types';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
 import * as actions from './swapSlice';
 import Token from '@utils/classes/Token';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { getSwapData } from '@services/1inch/api';
 import { AxiosError } from 'axios';
 import { formatEther, parseEther } from 'viem';
@@ -28,10 +28,9 @@ const useSwap = () => {
     loading,
     error,
   } = useAppSelector((state) => state.swap);
-  const { address: accountAddress } = useAccount();
-  const { chain } = useNetwork();
   const context = useContext(WagmiContext) as IWagmiContext;
   const { tokensList } = context;
+  const { chain } = useNetwork();
 
   const fromAmountWei = useMemo(() => {
     return parseEther(`${Number(fromAmount)}`, 'wei').toString();
@@ -73,7 +72,7 @@ const useSwap = () => {
   };
 
   const updateTransaction = async (params: WagmiProviderSwapParams) => {
-    if (!accountAddress || !chain) return null;
+    if (!context.accountAddress || !chain) return null;
 
     // Clear error.
     dispatch(actions.setError(null));
@@ -88,12 +87,16 @@ const useSwap = () => {
 
       // Update allowance.
       const newAllowance = await updateAllowance();
-      if (Number(newAllowance) < Number(fromAmountWei)) return;
+      if (Number(newAllowance) < Number(fromAmountWei)) {
+        dispatch(actions.setLoading(LOADING_STATUS.FAILED));
+
+        return;
+      }
 
       const swapData = await getSwapData({
         ...params,
         chainId: chain.id,
-        fromAddress: accountAddress,
+        fromAddress: context.accountAddress,
       });
 
       const toTokenAmountInEther = formatEther(
@@ -118,6 +121,12 @@ const useSwap = () => {
 
       dispatch(actions.setLoading(LOADING_STATUS.FAILED));
     }
+  };
+
+  const switchTokens = () => {
+    handleToTokenChange(fromToken);
+    handleFromTokenChange(toToken);
+    handleAmountChange(toAmount);
   };
 
   const swap = async () => {
@@ -168,6 +177,7 @@ const useSwap = () => {
     swap,
     approve,
     loading,
+    switchTokens,
     error,
   };
 };

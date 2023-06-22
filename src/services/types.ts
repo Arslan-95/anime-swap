@@ -52,6 +52,7 @@ export interface IWagmiContext {
   getAllowance: GetAllowance;
   swap: Swap;
   accountAddress: Address | undefined;
+  isConnected: boolean;
   chainId: number | undefined;
   tokens: I1InchTokensData;
   tokensList: Token[];
