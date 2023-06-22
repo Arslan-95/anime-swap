@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Button } from '@components/ui';
+import { Box, Button, CustomButton, UnderlinedButton } from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
 import useSwap from './useSwap';
+import { ReactComponent as SwitchIcon } from '@assets/icons/switch-kunai.svg';
+import { LOADING_STATUS } from '@utils/types';
 
 type Props = {
   children?: React.ReactNode;
@@ -17,6 +19,20 @@ const SwapBox = styled(Box)`
   h2 {
     text-align: center;
   }
+`;
+
+const SwitchButton = styled(CustomButton)`
+  margin: 32px auto;
+`;
+
+const SUnderlinedButton = styled(UnderlinedButton)`
+  margin: 0 0 10px auto;
+`;
+
+const STokenPrice = styled.span`
+  margin: 18px 0 0 auto;
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  font-weight: 500;
 `;
 
 const ActionButton = styled(Button)`
@@ -37,7 +53,10 @@ const Swap: React.FC<Props> = () => {
     handleToTokenChange,
     transaction,
     swap,
+    loading,
     approve,
+    switchTokens,
+    swapRate,
   } = useSwap();
 
   const showApproveButton = !isApproved && fromAmount;
@@ -45,6 +64,7 @@ const Swap: React.FC<Props> = () => {
   return (
     <SwapBox>
       <h2>SWAP</h2>
+      <SUnderlinedButton size="xsmall">Balance: 200 USDT</SUnderlinedButton>
       <CurrencyAmount
         value={fromAmount}
         onChange={handleAmountChange}
@@ -53,7 +73,9 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleFromTokenChange}
         onFocus={handleFocusFrom}
       />
-      <br />
+      <SwitchButton onClick={switchTokens} commonEffects>
+        <SwitchIcon />
+      </SwitchButton>
       <CurrencyAmount
         value={toAmount}
         placeholder="0.00"
@@ -61,10 +83,21 @@ const Swap: React.FC<Props> = () => {
         onTokenChange={handleToTokenChange}
         inputLocked
       />
+      <STokenPrice>
+        {Number(swapRate.toFixed(5))} {fromToken?.symbol} per {toToken?.symbol}
+      </STokenPrice>
       {showApproveButton ? (
-        <ActionButton onClick={approve}>Approve</ActionButton>
+        <ActionButton
+          onClick={approve}
+          disabled={loading === LOADING_STATUS.LOADING}
+        >
+          Approve
+        </ActionButton>
       ) : (
-        <ActionButton disabled={!transaction} onClick={swap}>
+        <ActionButton
+          disabled={!transaction || loading === LOADING_STATUS.LOADING}
+          onClick={swap}
+        >
           Swap
         </ActionButton>
       )}

@@ -24,7 +24,7 @@ interface IWagmiProviderWrapperProps {
 export const WagmiContext = React.createContext<IWagmiContext | null>(null);
 
 const WagmiProvider = ({ children }: IWagmiProviderProps) => {
-  const { address: accountAddress } = useAccount();
+  const { address: accountAddress, isConnected } = useAccount();
   const { chain } = useNetwork();
   const [tokens, setTokens] = useState<I1InchTokensData>({});
   const [tokensList, setTokensList] = useState<Token[]>([]);
@@ -98,6 +98,7 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
         approveToken,
         getAllowance,
         swap,
+        isConnected,
         accountAddress,
         chainId: chain?.id,
         tokens,

@@ -1,28 +1,39 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface IButton {
   className?: string;
   children?: React.ReactNode;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
+  size?: 'small' | 'medium';
 }
 
-const SButton = styled.button`
+const buttonSizeStyles = {
+  small: css`
+    padding: 12px;
+    font-size: 18px;
+  `,
+  medium: css`
+    padding: 12px;
+    font-size: 24px;
+  `,
+};
+
+const SButton = styled.button<IButton>`
   display: flex;
   align-items: center;
   justify-content: center;
 
   max-width: 100%;
-  padding: 12px;
   background: #282828;
   border-left: 3px solid ${({ theme }) => theme.colors.main};
   border-right: 3px solid ${({ theme }) => theme.colors.main};
   transition: 0.5s all, 0.2s border;
+  font-family: PocketMonk;
   cursor: pointer;
 
-  font-family: PocketMonk;
-  font-size: 24px;
+  ${({ size }) => buttonSizeStyles[size || 'medium']}
 
   &:hover {
     border-color: transparent;
@@ -41,9 +52,14 @@ const SButton = styled.button`
   }
 `;
 
-const Button = ({ className, children, onClick, disabled }: IButton) => {
+const Button = ({ className, children, onClick, disabled, size }: IButton) => {
   return (
-    <SButton className={className} onClick={onClick} disabled={disabled}>
+    <SButton
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+      size={size}
+    >
       {children}
     </SButton>
   );

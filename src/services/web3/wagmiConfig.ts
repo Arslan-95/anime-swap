@@ -2,34 +2,34 @@ import { bscTestnet, bsc } from 'viem/chains';
 import { configureChains, createConfig } from 'wagmi';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-// import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
-// import noderealRPC from './noderealRPC';
 import { walletConnectID } from '@services/config';
+import noderealRPC from './noderealRPC';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [bscTestnet, bsc],
   [
-    // jsonRpcProvider({
-    //   rpc: (chain) => {
-    //     let http = null;
-    //     let webSocket = null;
-    //     let rpc = null;
-
-    //     if (noderealRPC[chain.id]) {
-    //       http = noderealRPC[chain.id].http;
-    //       webSocket = noderealRPC[chain.id].webSocket;
-
-    //       rpc = {
-    //         http,
-    //         webSocket,
-    //       };
-    //     }
-
-    //     return rpc;
-    //   },
-    // }),
     publicProvider(),
+    jsonRpcProvider({
+      rpc: (chain) => {
+        let http = null;
+        let webSocket = null;
+        let rpc = null;
+
+        if (noderealRPC[chain.id]) {
+          http = noderealRPC[chain.id].http;
+          webSocket = noderealRPC[chain.id].webSocket;
+
+          rpc = {
+            http,
+            webSocket,
+          };
+        }
+
+        return rpc;
+      },
+    }),
   ]
 );
 const config = createConfig({

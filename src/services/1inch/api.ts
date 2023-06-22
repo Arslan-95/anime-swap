@@ -5,6 +5,8 @@ import {
   I1InchSwapDataParams,
   I1InchSwapData,
   I1InchTokensData,
+  I1InchQuoteParams,
+  I1InchQuote,
 } from '../types';
 
 export const broadcastApiUrl = (chainId: number) =>
@@ -57,6 +59,25 @@ export const buildTxForApproveTradeWithRouter = async (
   const transaction = await axios(url).then((res) => res.data);
 
   return transaction;
+};
+
+export const getQuote = async ({
+  fromTokenAddress,
+  toTokenAddress,
+  weiAmount,
+  chainId,
+}: I1InchQuoteParams): Promise<I1InchQuote> => {
+  const quoteParams = {
+    fromTokenAddress,
+    toTokenAddress,
+    amount: weiAmount,
+  };
+
+  const quote: I1InchQuote = await axios(
+    apiRequestUrl('/quote', quoteParams, chainId)
+  ).then((res) => res.data);
+
+  return quote;
 };
 
 export const getSwapData = async ({
