@@ -6,6 +6,7 @@ interface Props {
   className?: string;
   children?: React.ReactNode;
   commonEffects?: boolean;
+  disabled?: boolean;
 }
 
 const commonEffectsStyles = css`
@@ -31,12 +32,14 @@ const CustomButton = ({
   onClick,
   className,
   commonEffects = false,
+  disabled,
 }: Props) => {
   return (
     <SCustomButton
       onClick={onClick}
       className={className}
       commonEffects={commonEffects}
+      disabled={disabled}
     >
       {children}
     </SCustomButton>
