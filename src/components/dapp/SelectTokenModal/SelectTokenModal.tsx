@@ -1,4 +1,4 @@
-import React, { MouseEvent, useContext, useEffect } from 'react';
+import React, { MouseEventHandler, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Modal, Search } from '@components/ui';
 import { WagmiContext } from '@services/web3/WagmiProvider';
@@ -7,12 +7,13 @@ import { Address } from 'wagmi';
 import { OnTokenChange } from '../types';
 import Token from '@utils/classes/Token';
 import CommonTokens from './CommonTokens';
+import TokenList from './TokenList';
 
 interface ISelectTokenModalProps {
   selectedToken?: Token | null;
   isOpen: boolean;
   isVisible?: boolean;
-  onChange: OnTokenChange;
+  onChange?: OnTokenChange;
   onClose: () => void;
 }
 
@@ -56,11 +57,11 @@ const SelectTokenModal = ({
   // React.useEffect(() => {
   // }, [searchParams]);
 
-  const handleTokenChange = (e: MouseEvent<HTMLDivElement>) => {
+  const handleTokenChange: MouseEventHandler<HTMLButtonElement> = (e) => {
     const address = e.currentTarget.getAttribute('data-address') as Address;
     const token = tokens[address] || null;
 
-    if (token) {
+    if (token && onChange) {
       onChange(token);
     }
 
@@ -83,19 +84,14 @@ const SelectTokenModal = ({
         <SCommonTokens
           tokens={tokensList.slice(0, 5)}
           selectedToken={selectedToken}
+          onChange={handleTokenChange}
         />
-        {tokensList.map((token) => {
-          return (
-            <div
-              key={token.address}
-              data-address={token.address}
-              onClick={handleTokenChange}
-            >
-              <h2>{balances[token.address] || 0}</h2>
-              {token.address}
-            </div>
-          );
-        })}
+        <TokenList
+          balances={balances}
+          list={tokensList}
+          onChange={handleTokenChange}
+          selectedToken={selectedToken}
+        />
       </SModalContent>
     </Modal>
   );

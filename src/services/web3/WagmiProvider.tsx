@@ -7,6 +7,7 @@ import {
   ApproveToken,
   GetAllowance,
   I1InchTokensData,
+  IBalances,
   IWagmiContext,
   Swap,
 } from '@services/types';
@@ -33,7 +34,7 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const tokensList = useMemo(() => Object.values(tokens), [tokens]);
 
   const updateBalances = async (entryTokens: Address[]) => {
-    const updatedBalances: { [address: string]: string } = {
+    const updatedBalances: IBalances = {
       ...balances,
     };
 
