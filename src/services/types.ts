@@ -75,4 +75,6 @@ export interface IWagmiContext {
   chainId: number | undefined;
   tokens: I1InchTokensData;
   tokensList: Token[];
+  updateBalances: (entryTokens: Address[]) => Promise<void>;
+  balances: { [address: Address]: string };
 }

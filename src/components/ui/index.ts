@@ -6,3 +6,4 @@ export { default as Modal } from './Modal';
 export { default as Search } from './Search';
 export { default as Button } from './Button';
 export { default as UnderlinedButton } from './UnderlinedButton';
+export { default as Number } from './Number';

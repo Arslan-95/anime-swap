@@ -6,6 +6,7 @@ interface IUnderlinedButtonProps {
   children?: React.ReactNode;
   size: 'xsmall' | 'small';
   className?: string;
+  onClick: () => void;
 }
 
 const SUnderlinedButton = styled(CustomButton)<IUnderlinedButtonProps>`
@@ -26,9 +27,10 @@ const UnderlinedButton = ({
   children,
   size = 'small',
   className,
+  onClick,
 }: IUnderlinedButtonProps) => {
   return (
-    <SUnderlinedButton className={className} size={size}>
+    <SUnderlinedButton onClick={onClick} className={className} size={size}>
       {children}
     </SUnderlinedButton>
   );

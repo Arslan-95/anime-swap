@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useAccount, useNetwork, WagmiConfig } from 'wagmi';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useAccount, useNetwork, WagmiConfig, Address } from 'wagmi';
 import * as inchApi from '@services/1inch/api';
 import wagmiConfig from './wagmiConfig';
-import { sendTransaction } from '@wagmi/core';
+import { sendTransaction, fetchBalance } from '@wagmi/core';
 import {
   ApproveToken,
   GetAllowance,
@@ -10,8 +10,8 @@ import {
   IWagmiContext,
   Swap,
 } from '@services/types';
-import Token from '@utils/classes/Token';
-import { DEFAULT_CHAIN } from '@services/config';
+import { DEFAULT_CHAIN, DEFAULT_TOKEN_ADDRESS } from '@services/config';
+import _ from 'lodash';
 
 interface IWagmiProviderProps {
   children?: React.ReactNode;
@@ -27,7 +27,36 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const { address: accountAddress, isConnected } = useAccount();
   const { chain } = useNetwork();
   const [tokens, setTokens] = useState<I1InchTokensData>({});
-  const [tokensList, setTokensList] = useState<Token[]>([]);
+  const [balances, setBalances] = useState<{
+    [address: string]: string;
+  }>({});
+  const tokensList = useMemo(() => Object.values(tokens), [tokens]);
+
+  const updateBalances = async (entryTokens: Address[]) => {
+    const updatedBalances: { [address: string]: string } = {
+      ...balances,
+    };
+
+    try {
+      const chunks = _.chunk(entryTokens, 20);
+      for (const addresses of chunks) {
+        for (const address of addresses) {
+          const balance = await fetchBalance({
+            address: accountAddress as Address,
+            token:
+              address === DEFAULT_TOKEN_ADDRESS
+                ? undefined
+                : (address as Address),
+          });
+
+          updatedBalances[address] = balance.formatted;
+        }
+        setBalances((prev) => ({ ...prev, ...updatedBalances }));
+      }
+    } catch (error) {
+      console.log('[updateBalances]', error);
+    }
+  };
 
   const approveToken: ApproveToken = async (tokenAddress, weiAmount) => {
     if (!accountAddress || !chain) return;
@@ -79,14 +108,17 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const updateTokens = async () => {
     try {
       const updatedTokens = await inchApi.getTokens(chain?.id || DEFAULT_CHAIN);
-      const updatedTokensList = Object.values(updatedTokens);
 
       setTokens(updatedTokens);
-      setTokensList(updatedTokensList);
     } catch (error) {
       console.log('[updateTokens]', error);
     }
   };
+
+  // Clear tokens and balances
+  useEffect(() => {
+    setBalances({});
+  }, [accountAddress, chain]);
 
   useEffect(() => {
     updateTokens();
@@ -103,6 +135,8 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
         chainId: chain?.id,
         tokens,
         tokensList,
+        updateBalances,
+        balances,
       }}
     >
       {children}

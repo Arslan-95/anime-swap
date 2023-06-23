@@ -36,9 +36,17 @@ const swapSlice = createSlice({
   initialState,
   reducers: {
     setFromToken: (state, action: PayloadAction<Token | null>) => {
+      if (state.toToken?.address === action.payload?.address) {
+        state.toToken = state.fromToken;
+      }
+
       state.fromToken = action.payload;
     },
     setToToken: (state, action: PayloadAction<Token | null>) => {
+      if (state.fromToken?.address === action.payload?.address) {
+        state.fromToken = state.toToken;
+      }
+
       state.toToken = action.payload;
     },
     setFromAmount: (state, action: PayloadAction<string>) => {
