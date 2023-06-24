@@ -1,7 +1,8 @@
 import React, { ChangeEvent, MouseEvent } from 'react';
-import { formatCurrencyAmount } from '@utils/formatCurrencyAmount';
 import styled from 'styled-components';
+import { formatCurrencyAmount } from '@utils/formatCurrencyAmount';
 import { InputProps, InputValue } from './types';
+import { IColors } from '@features/theme/types';
 
 type InputMode =
   | 'text'
@@ -16,6 +17,7 @@ type InputMode =
 
 interface SInputWrapperProps {
   focused: boolean;
+  color?: keyof IColors;
 }
 
 const SInputWrapper = styled.div<SInputWrapperProps>`
@@ -25,28 +27,28 @@ const SInputWrapper = styled.div<SInputWrapperProps>`
   padding: 12px 17px;
   background: #282828;
   border-radius: 12px;
-  box-shadow: ${({ focused, theme }) =>
-    focused ? `0px 0px 0px 1px ${theme.colors.main}` : 'none'};
+  box-shadow: ${({ focused, theme, color }) =>
+    focused ? `0px 0px 0px 1px ${theme.colors[color || 'main']}` : 'none'};
 
   transition: box-shadow 0.3s;
-`;
 
-const SInput = styled.input`
-  flex: 1 1 auto;
-  border: none;
-  background: none;
-  outline: none;
+  input {
+    flex: 1 1 auto;
+    border: none;
+    background: none;
+    outline: none;
 
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    appearance: none;
-    margin: 0;
-  }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
 
-  &[type='number'] {
-    -moz-appearance: textfield;
-    appearance: textfield;
+    &[type='number'] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
   }
 `;
 
@@ -63,6 +65,7 @@ const Input: React.FC<InputProps> = ({
   className,
   indicator,
   locked,
+  wrapperColor = 'main',
 }) => {
   const [focused, setFocused] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -114,14 +117,18 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <SInputWrapper focused={focused} onClick={handleWrapperClick}>
-      <SInput
+    <SInputWrapper
+      focused={focused}
+      className={className}
+      color={wrapperColor}
+      onClick={handleWrapperClick}
+    >
+      <input
         type="text"
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
         inputMode={inputMode}
-        className={className}
         onFocus={handleFocus}
         onBlur={handleBlur}
         ref={inputRef}

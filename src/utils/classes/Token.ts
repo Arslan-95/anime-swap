@@ -7,6 +7,7 @@ interface ITokenDetails {
   decimals: number;
   logoURI: string;
   chainId?: number;
+  balance?: string;
 }
 
 class Token implements ITokenDetails {
@@ -16,7 +17,8 @@ class Token implements ITokenDetails {
     public address: Address,
     public decimals: number,
     public logoURI: string,
-    public chainId: number
+    public chainId: number,
+    public balance: string
   ) {}
 }
 

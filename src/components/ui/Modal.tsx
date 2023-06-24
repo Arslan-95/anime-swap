@@ -69,6 +69,8 @@ const STitle = styled.div`
   justify-content: space-between;
   gap: 10px;
 
+  margin-bottom: 15px;
+
   h3 {
     font-weight: 400;
     font-size: 32px;

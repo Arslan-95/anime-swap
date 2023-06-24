@@ -14,6 +14,7 @@ type HandleTokenChange = (token: Token | null) => void;
 type HandleAmountChange = (amount: string) => void;
 
 let transactionUpdateTimeout: NodeJS.Timeout;
+const BALANCE_UPDATE_INTERVAL = 5000;
 
 const useSwap = () => {
   const dispatch = useAppDispatch();
@@ -30,9 +31,10 @@ const useSwap = () => {
     swapRate,
   } = useAppSelector((state) => state.swap);
   const context = useContext(WagmiContext) as IWagmiContext;
-  const { tokensList } = context;
+  const { tokensList, tokens, updateBalances, balances } = context;
   const { chain } = useNetwork();
 
+  const fromTokenBalance = fromToken && balances[fromToken.address];
   const fromAmountWei = useMemo(() => {
     return parseEther(`${Number(fromAmount)}`, 'wei').toString();
   }, [fromAmount]);
@@ -42,6 +44,7 @@ const useSwap = () => {
   const handleFromTokenChange: HandleTokenChange = (token) => {
     dispatch(actions.setFromToken(token));
   };
+
   const handleToTokenChange: HandleTokenChange = (token) => {
     dispatch(actions.setToToken(token));
   };
@@ -155,14 +158,33 @@ const useSwap = () => {
     await updateAllowance();
   };
 
+  const updateFromTokenBalance = () => {
+    if (!fromToken) return;
+
+    updateBalances([fromToken.address]);
+  };
+
+  // Update allowance,
+  // Set from token balance update interval.
   useEffect(() => {
-    // Update allowance.
     updateAllowance();
+    updateFromTokenBalance();
+
+    const balanceUpdateInterval = setInterval(
+      updateFromTokenBalance,
+      BALANCE_UPDATE_INTERVAL
+    );
+
+    return () => clearInterval(balanceUpdateInterval);
   }, [fromToken]);
 
+  // Update from and to tokens when tokensList changes.
   useEffect(() => {
-    handleFromTokenChange(tokensList[0] || null);
-    handleToTokenChange(tokensList[1] || null);
+    const updatedFromToken = fromToken?.address && tokens[fromToken.address];
+    const updatedToToken = toToken?.address && tokens[toToken.address];
+
+    handleFromTokenChange(updatedFromToken || tokensList[0] || null);
+    handleToTokenChange(updatedToToken || tokensList[1] || null);
   }, [tokensList]);
 
   useEffect(() => {
@@ -196,6 +218,7 @@ const useSwap = () => {
     approve,
     loading,
     switchTokens,
+    fromTokenBalance,
     swapRate,
     error,
   };

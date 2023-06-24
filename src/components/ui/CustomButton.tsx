@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
 
-interface Props {
-  onClick?: () => void;
+interface ICustomButtonProps {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   children?: React.ReactNode;
   commonEffects?: boolean;
+  disabled?: boolean;
 }
 
 const commonEffectsStyles = css`
@@ -16,7 +17,7 @@ const commonEffectsStyles = css`
   }
 `;
 
-const SCustomButton = styled.button<Props>`
+const SCustomButton = styled.button<ICustomButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,12 +32,16 @@ const CustomButton = ({
   onClick,
   className,
   commonEffects = false,
-}: Props) => {
+  disabled,
+  ...otherProps
+}: ICustomButtonProps) => {
   return (
     <SCustomButton
+      {...otherProps}
       onClick={onClick}
-      className={className}
       commonEffects={commonEffects}
+      disabled={disabled}
+      className={className}
     >
       {children}
     </SCustomButton>

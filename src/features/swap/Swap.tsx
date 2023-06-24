@@ -1,10 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Button, CustomButton, UnderlinedButton } from '@components/ui';
+import {
+  Box,
+  Button,
+  CustomButton,
+  UnderlinedButton,
+  Number,
+} from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
 import useSwap from './useSwap';
 import { ReactComponent as SwitchIcon } from '@assets/icons/switch-kunai.svg';
 import { LOADING_STATUS } from '@utils/types';
+import _ from 'lodash';
 
 type Props = {
   children?: React.ReactNode;
@@ -57,14 +64,26 @@ const Swap: React.FC<Props> = () => {
     approve,
     switchTokens,
     swapRate,
+    fromTokenBalance,
   } = useSwap();
 
   const showApproveButton = !isApproved && fromAmount;
 
+  const handleBalanceClick = () => {
+    if (!fromTokenBalance) return;
+
+    handleAmountChange(fromTokenBalance);
+  };
+
   return (
     <SwapBox>
       <h2>SWAP</h2>
-      <SUnderlinedButton size="xsmall">Balance: 200 USDT</SUnderlinedButton>
+      {_.isString(fromTokenBalance) && (
+        <SUnderlinedButton size="xsmall" onClick={handleBalanceClick}>
+          Balance:&nbsp;
+          <Number number={fromTokenBalance} symbol={fromToken?.symbol} />
+        </SUnderlinedButton>
+      )}
       <CurrencyAmount
         value={fromAmount}
         onChange={handleAmountChange}
@@ -84,7 +103,9 @@ const Swap: React.FC<Props> = () => {
         inputLocked
       />
       <STokenPrice>
-        {Number(swapRate.toFixed(5))} {fromToken?.symbol} per {toToken?.symbol}
+        <Number number={swapRate} symbol={fromToken?.symbol} />
+        &nbsp;per&nbsp;
+        {toToken?.symbol}
       </STokenPrice>
       {showApproveButton ? (
         <ActionButton
