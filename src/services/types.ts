@@ -29,6 +29,25 @@ export interface I1InchSwapData {
   tx: I1InchTx;
 }
 
+export interface I1InchQuoteParams {
+  fromTokenAddress: Address;
+  toTokenAddress: Address;
+  weiAmount: string;
+  chainId: number;
+}
+
+interface I1InchProtocol {
+  name: string;
+  part: number;
+  fromTokenAddress: string;
+  toTokenAddress: string;
+}
+
+export interface I1InchQuote extends Omit<I1InchSwapData, 'tx'> {
+  protocols: I1InchProtocol[];
+  estimatedGas: number;
+}
+
 export interface I1InchTokensData {
   [key: string]: Token;
 }
@@ -37,6 +56,10 @@ export type WagmiProviderSwapParams = Omit<
   I1InchSwapDataParams,
   'chainId' | 'fromAddress'
 >;
+
+export interface IBalances {
+  [address: Address]: string;
+}
 
 export type ApproveToken = (
   tokenAddress: Address,
@@ -52,7 +75,10 @@ export interface IWagmiContext {
   getAllowance: GetAllowance;
   swap: Swap;
   accountAddress: Address | undefined;
+  isConnected: boolean;
   chainId: number | undefined;
   tokens: I1InchTokensData;
   tokensList: Token[];
+  updateBalances: (entryTokens: Address[]) => Promise<void>;
+  balances: IBalances;
 }

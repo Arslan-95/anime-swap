@@ -1,3 +1,4 @@
+import { IColors } from '@features/theme/types.ts';
 import { ReactNode } from 'react';
 
 export type InputValue = string;
@@ -11,6 +12,7 @@ export interface InputProps {
   indicator?: ReactNode;
   onFocus?: () => void;
   locked?: boolean;
+  wrapperColor?: keyof IColors;
 }
 
 export type { IModalProps } from './Modal.tsx';

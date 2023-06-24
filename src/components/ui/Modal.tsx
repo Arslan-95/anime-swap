@@ -26,6 +26,7 @@ const SModalWrapper = styled(motion.div)<{ isVisible: boolean }>`
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 999;
 
   display: flex;
   justify-content: center;
@@ -67,6 +68,8 @@ const STitle = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 10px;
+
+  margin-bottom: 15px;
 
   h3 {
     font-weight: 400;

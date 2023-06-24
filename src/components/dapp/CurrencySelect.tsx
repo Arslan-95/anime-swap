@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import type { OnTokenChange } from './types';
 import Token from '@utils/classes/Token';
 import selectAngleIcon from '@assets/icons/select-angle.svg';
-import SelectTokenModal from './SelectTokenModal';
+import { SelectTokenModal } from '.';
 import { CustomButton } from '@components/ui';
 import TokenIcon from './TokenIcon';
 
@@ -64,6 +64,7 @@ const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
         onChange={onChange}
         isOpen={isModal}
         onClose={closeModal}
+        selectedToken={token}
       />
     </>
   );
