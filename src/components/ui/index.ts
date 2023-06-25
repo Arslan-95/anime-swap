@@ -7,3 +7,4 @@ export { default as Search } from './Search';
 export { default as Button } from './Button';
 export { default as UnderlinedButton } from './UnderlinedButton';
 export { default as Number } from './Number';
+export { default as ScrollBlock } from './ScrollBlock';

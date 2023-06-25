@@ -91,6 +91,7 @@ const SelectTokenModal = ({
           list={tokensList}
           onChange={handleTokenChange}
           selectedToken={selectedToken}
+          maxHeight={340}
         />
       </SModalContent>
     </Modal>
