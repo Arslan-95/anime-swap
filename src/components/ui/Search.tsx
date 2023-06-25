@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import { Input } from '.';
 import type { InputProps, InputValue } from './types';
@@ -13,16 +14,14 @@ const SInput = styled(Input)`
   letter-spacing: 0.025em;
 `;
 
-const Search = ({ onChange, className, ...otherProps }: ISearchProps) => {
-  return (
-    <SInput
-      type="text"
-      placeholder="Search..."
-      onChange={onChange}
-      className={className}
-      {...otherProps}
-    />
-  );
-};
+const Search = ({ onChange, className, ...otherProps }: ISearchProps) => (
+  <SInput
+    type="text"
+    placeholder="Search..."
+    onChange={onChange}
+    className={className}
+    {...otherProps}
+  />
+);
 
 export default Search;

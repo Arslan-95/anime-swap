@@ -15,8 +15,6 @@ interface ITokensListProps {
 }
 
 const STokenList = styled.div`
-  overflow: hidden auto;
-
   ul {
     padding: 0;
     list-style-type: none;
