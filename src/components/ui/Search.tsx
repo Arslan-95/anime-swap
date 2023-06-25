@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import styled from 'styled-components';
 import { Input } from '.';
 import type { InputProps, InputValue } from './types';
