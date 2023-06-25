@@ -7,13 +7,12 @@ import {
   ApproveToken,
   GetAllowance,
   I1InchTokensData,
-  IBalances,
   IWagmiContext,
   Swap,
 } from '@services/types';
 import { DEFAULT_CHAIN, DEFAULT_TOKEN_ADDRESS } from '@services/config';
-import _ from 'lodash';
 import { LOADING_STATUS } from '@utils/types';
+import _ from 'lodash';
 
 interface IWagmiProviderProps {
   children?: React.ReactNode;
@@ -29,18 +28,14 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const { address: accountAddress, isConnected } = useAccount();
   const { chain } = useNetwork();
   const [tokens, setTokens] = useState<I1InchTokensData>({});
-  const [balances, setBalances] = useState<{
-    [address: string]: string;
-  }>({});
   const [balancesLoading, setBalancesLoading] = useState<LOADING_STATUS>(
     LOADING_STATUS.IDLE
   );
   const tokensList = useMemo(() => Object.values(tokens), [tokens]);
 
   const updateBalances = async (entryTokens: Address[]) => {
-    const updatedBalances: IBalances = {
-      ...balances,
-    };
+    const updatedBalances: { [address: string]: string } = {};
+    const updatedTokens: I1InchTokensData = {};
 
     try {
       const chunks = _.chunk(entryTokens, 20);
@@ -56,7 +51,16 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
 
           updatedBalances[address] = balance.formatted;
         }
-        setBalances((prev) => ({ ...prev, ...updatedBalances }));
+        setTokens((prev) => {
+          for (const [key, balance] of Object.entries(updatedBalances)) {
+            updatedTokens[key] = {
+              ...prev[key],
+              balance,
+            };
+          }
+
+          return { ...prev, ...updatedTokens };
+        });
       }
     } catch (error) {
       console.log('[updateBalances]', error);
@@ -126,7 +130,6 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
 
   // Clear tokens and balances
   useEffect(() => {
-    setBalances({});
     setBalancesLoading(LOADING_STATUS.IDLE);
   }, [accountAddress, chain]);
 
@@ -146,7 +149,6 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
         tokens,
         tokensList,
         updateBalances,
-        balances,
         balancesLoading,
       }}
     >

@@ -58,10 +58,6 @@ export type WagmiProviderSwapParams = Omit<
   'chainId' | 'fromAddress'
 >;
 
-export interface IBalances {
-  [address: Address]: string;
-}
-
 export type ApproveToken = (
   tokenAddress: Address,
   weiAmount: string
@@ -81,6 +77,5 @@ export interface IWagmiContext {
   tokens: I1InchTokensData;
   tokensList: Token[];
   updateBalances: (entryTokens: Address[]) => Promise<void>;
-  balances: IBalances;
   balancesLoading: LOADING_STATUS;
 }

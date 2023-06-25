@@ -1,7 +1,6 @@
 import { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import Token from '@utils/classes/Token';
-import { IBalances } from '@services/types';
 import { CustomButton, ScrollBlock } from '@components/ui';
 import { TokenIcon } from '..';
 import { getFixedNumber } from '@utils/numbers';
@@ -9,7 +8,6 @@ import { getFixedNumber } from '@utils/numbers';
 interface ITokensListProps {
   selectedToken?: Token | null;
   onChange?: MouseEventHandler<HTMLButtonElement>;
-  balances: IBalances;
   list: Token[];
   maxHeight?: number;
 }
@@ -67,12 +65,7 @@ const STokenBalance = styled.span`
   font-size: 14px;
 `;
 
-const TokenList = ({
-  list,
-  balances,
-  onChange,
-  maxHeight,
-}: ITokensListProps) => {
+const TokenList = ({ list, onChange, maxHeight }: ITokensListProps) => {
   return (
     <STokenList>
       <ScrollBlock maxHeight={maxHeight}>
@@ -89,9 +82,7 @@ const TokenList = ({
                     </STokenTitles>
                   </STokenDetails>
                   <STokenBalance>
-                    {balances[token.address]
-                      ? getFixedNumber(balances[token.address], 5)
-                      : 0}
+                    {token.balance ? getFixedNumber(token.balance, 5) : 0}
                   </STokenBalance>
                 </STokenItem>
               </li>

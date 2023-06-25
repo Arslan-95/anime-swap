@@ -41,9 +41,8 @@ const SelectToken = ({
   onChange,
   onClose,
 }: ISelectTokenProps) => {
-  const { tokensList, tokens, balances } = useContext(
-    WagmiContext
-  ) as IWagmiContext;
+  const { tokensList, tokens } = useContext(WagmiContext) as IWagmiContext;
+
   const [searchParams, setSearchParams] = React.useState('');
   const defferedSearchParams = useDeferredValue(searchParams);
 
@@ -58,7 +57,7 @@ const SelectToken = ({
 
       return isAddress || isSymbol || isName;
     });
-  }, [defferedSearchParams]);
+  }, [defferedSearchParams, tokensList]);
 
   const handleSearch = (value: string) => {
     setSearchParams(value);
@@ -84,7 +83,6 @@ const SelectToken = ({
         onChange={handleTokenChange}
       />
       <TokenList
-        balances={balances}
         list={filteredTokens}
         onChange={handleTokenChange}
         selectedToken={selectedToken}
