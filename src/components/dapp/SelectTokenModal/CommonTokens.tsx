@@ -2,7 +2,7 @@ import { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import Token from '@utils/classes/Token';
 import { TokenIcon } from '..';
-import { CustomButton } from '@components/ui';
+import { CustomButton, ScrollBlock } from '@components/ui';
 
 interface ICommonTokensProps {
   tokens: Token[];
@@ -16,15 +16,18 @@ const SCommonTokens = styled.div`
   font-weight: 600;
 `;
 
-const STokensList = styled.div`
+const STokensWrapper = styled.div`
+  margin-top: 12px;
+  max-width: 100%;
+`;
+
+const STokensList = styled.ul`
   display: flex;
-  align-items: center;
+  align-content: center;
   gap: 13px;
 
-  margin-top: 12px;
-  padding-bottom: 8px;
-  max-width: 100%;
-  overflow-x: scroll;
+  padding: 0 0 8px;
+  list-style-type: none;
 `;
 
 const SCommonToken = styled(CustomButton)`
@@ -58,19 +61,24 @@ const CommonTokens = ({
   return (
     <SCommonTokens className={className}>
       <span>Common tokens</span>
-      <STokensList>
-        {tokens.map((token) => (
-          <SCommonToken
-            disabled={selectedToken?.address === token.address}
-            data-address={token.address}
-            key={token.address}
-            onClick={onChange}
-          >
-            <TokenIcon src={token.logoURI} size={24} />
-            <span>{token.symbol?.toUpperCase()}</span>
-          </SCommonToken>
-        ))}
-      </STokensList>
+      <STokensWrapper>
+        <ScrollBlock>
+          <STokensList>
+            {tokens.map((token) => (
+              <li key={token.address}>
+                <SCommonToken
+                  disabled={selectedToken?.address === token.address}
+                  data-address={token.address}
+                  onClick={onChange}
+                >
+                  <TokenIcon src={token.logoURI} size={24} />
+                  <span>{token.symbol?.toUpperCase()}</span>
+                </SCommonToken>
+              </li>
+            ))}
+          </STokensList>
+        </ScrollBlock>
+      </STokensWrapper>
     </SCommonTokens>
   );
 };

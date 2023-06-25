@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import useIsInViewport from '@hooks/useIsInViewport';
+import { LOADING_STATUS } from '@utils/types';
+import { memo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface ITokenIconProps {
@@ -6,54 +8,60 @@ interface ITokenIconProps {
   size?: number;
 }
 
-const STokenIcon = styled.img<ITokenIconProps>`
-  object-fit: contain;
-  height: ${({ size }) => size || 37}px;
-  width: ${({ size }) => size || 37}px;
-  border-radius: 50%;
-`;
-
-const SEmptyIcon = styled.div<ITokenIconProps>`
-  height: ${({ size }) => size || 37}px;
-  width: ${({ size }) => size || 37}px;
-  border-radius: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.light};
-`;
-
-const TokenIcon = ({ src, size = 37 }: ITokenIconProps) => {
-  const iconRef = useRef<HTMLImageElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    if (!src) return;
-    setIsLoaded(false);
-    setIsError(false);
-
-    const icon = new Image();
-
-    const handleLoad = () => {
-      setIsLoaded(true);
-    };
-    const handleError = () => {
-      setIsError(true);
-    };
-
-    icon.addEventListener('load', handleLoad);
-    icon.addEventListener('error', handleError);
-    icon.src = src;
-
-    return () => {
-      icon.removeEventListener('load', handleLoad);
-      icon.removeEventListener('error', handleError);
-    };
-  }, [src]);
-
-  if (src && isLoaded && !isError) {
-    return <STokenIcon size={size} ref={iconRef} src={src} />;
-  }
-
-  return <SEmptyIcon size={size} />;
+type TIconWrapperProps = Pick<ITokenIconProps, 'size'> & {
+  imageIsVisible: boolean;
 };
+const SIconWrapper = styled.div<TIconWrapperProps>`
+  height: ${({ size }) => size || 37}px;
+  width: ${({ size }) => size || 37}px;
+  border-radius: 50%;
+  border: ${({ imageIsVisible, theme }) =>
+    imageIsVisible ? '' : `1px solid ${theme.colors.light}`};
+
+  img {
+    object-fit: contain;
+    border-radius: 50%;
+
+    visibility: ${({ imageIsVisible }) =>
+      imageIsVisible ? 'visible' : 'hidden'};
+  }
+`;
+const failedIcons: { [key: string]: boolean } = {};
+
+const TokenIcon = memo(({ src, size = 37 }: ITokenIconProps) => {
+  const [loading, setLoading] = useState(LOADING_STATUS.IDLE);
+  const wrapperRef = useRef(null);
+  const isInViewport = useIsInViewport(wrapperRef);
+
+  const isFailed = src && failedIcons[src];
+  const isSuccessed = loading === LOADING_STATUS.SUCCESSED;
+
+  const handleLoad = () => {
+    setLoading(LOADING_STATUS.SUCCESSED);
+  };
+
+  const handleError = () => {
+    setLoading(LOADING_STATUS.FAILED);
+
+    if (src) {
+      failedIcons[src] = true;
+    }
+  };
+
+  return (
+    <SIconWrapper size={size} imageIsVisible={isSuccessed} ref={wrapperRef}>
+      {(isSuccessed || isInViewport) && !isFailed && (
+        <img
+          height={size}
+          width={size}
+          src={src}
+          onLoad={handleLoad}
+          onError={handleError}
+          loading="lazy"
+        />
+      )}
+    </SIconWrapper>
+  );
+});
 
 export default TokenIcon;

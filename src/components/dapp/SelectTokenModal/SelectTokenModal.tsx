@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, useContext, useEffect } from 'react';
+import React, {
+  MouseEventHandler,
+  useContext,
+  useDeferredValue,
+  useMemo,
+} from 'react';
 import styled from 'styled-components';
 import { Modal, Search } from '@components/ui';
 import { WagmiContext } from '@services/web3/WagmiProvider';
@@ -8,14 +13,15 @@ import { OnTokenChange } from '../types';
 import Token from '@utils/classes/Token';
 import CommonTokens from './CommonTokens';
 import TokenList from './TokenList';
+import { IModalProps } from '@components/ui/Modal';
 
-interface ISelectTokenModalProps {
+interface ISelectTokenProps {
   selectedToken?: Token | null;
-  isOpen: boolean;
-  isVisible?: boolean;
   onChange?: OnTokenChange;
-  onClose: () => void;
+  onClose: IModalProps['onClose'];
 }
+
+type ISelectTokenModalProps = ISelectTokenProps & IModalProps;
 
 const SModalContent = styled.div`
   max-width: 100%;
@@ -30,32 +36,32 @@ const SCommonTokens = styled(CommonTokens)`
   margin: 16px 0;
 `;
 
-const SelectTokenModal = ({
+const SelectToken = ({
   selectedToken,
-  isOpen,
-  isVisible,
-  onClose,
   onChange,
-}: ISelectTokenModalProps) => {
-  const {
-    tokensList,
-    tokens,
-    accountAddress,
-    chainId,
-    // updateBalances,
-    balances,
-  } = useContext(WagmiContext) as IWagmiContext;
-  const [, setSearchParams] = React.useState('');
-  const [, startTransition] = React.useTransition();
+  onClose,
+}: ISelectTokenProps) => {
+  const { tokensList, tokens } = useContext(WagmiContext) as IWagmiContext;
+
+  const [searchParams, setSearchParams] = React.useState('');
+  const defferedSearchParams = useDeferredValue(searchParams);
+
+  const filteredTokens = useMemo(() => {
+    if (!defferedSearchParams) return tokensList;
+
+    return tokensList.filter((token) => {
+      const searchRegex = new RegExp(defferedSearchParams, 'gi');
+      const isAddress = token.address?.search(searchRegex) !== -1;
+      const isSymbol = token.symbol?.search(searchRegex) !== -1;
+      const isName = token.name?.search(searchRegex) !== -1;
+
+      return isAddress || isSymbol || isName;
+    });
+  }, [defferedSearchParams, tokensList]);
 
   const handleSearch = (value: string) => {
-    startTransition(() => {
-      setSearchParams(value);
-    });
+    setSearchParams(value);
   };
-
-  // React.useEffect(() => {
-  // }, [searchParams]);
 
   const handleTokenChange: MouseEventHandler<HTMLButtonElement> = (e) => {
     const address = e.currentTarget.getAttribute('data-address') as Address;
@@ -68,10 +74,30 @@ const SelectTokenModal = ({
     onClose();
   };
 
-  useEffect(() => {
-    // updateBalances(Object.keys(tokens) as Address[]);
-  }, [accountAddress, chainId]);
+  return (
+    <SModalContent>
+      <SSearch onChange={handleSearch} wrapperColor="light" />
+      <SCommonTokens
+        tokens={tokensList.slice(0, 5)}
+        selectedToken={selectedToken}
+        onChange={handleTokenChange}
+      />
+      <TokenList
+        list={filteredTokens}
+        onChange={handleTokenChange}
+        selectedToken={selectedToken}
+        maxHeight={340}
+      />
+    </SModalContent>
+  );
+};
 
+const SelectTokenModal = ({
+  isOpen,
+  onClose,
+  isVisible,
+  ...selectTokenProps
+}: ISelectTokenModalProps) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -79,20 +105,7 @@ const SelectTokenModal = ({
       onClose={onClose}
       isVisible={isVisible}
     >
-      <SModalContent>
-        <SSearch onChange={handleSearch} wrapperColor="light" />
-        <SCommonTokens
-          tokens={tokensList.slice(0, 5)}
-          selectedToken={selectedToken}
-          onChange={handleTokenChange}
-        />
-        <TokenList
-          balances={balances}
-          list={tokensList}
-          onChange={handleTokenChange}
-          selectedToken={selectedToken}
-        />
-      </SModalContent>
+      <SelectToken onClose={onClose} {...selectTokenProps} />
     </Modal>
   );
 };
