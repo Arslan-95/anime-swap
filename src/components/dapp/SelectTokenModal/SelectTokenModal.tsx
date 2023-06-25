@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useContext, useEffect } from 'react';
+import React, { MouseEventHandler, useContext } from 'react';
 import styled from 'styled-components';
 import { Modal, Search } from '@components/ui';
 import { WagmiContext } from '@services/web3/WagmiProvider';
@@ -37,14 +37,9 @@ const SelectTokenModal = ({
   onClose,
   onChange,
 }: ISelectTokenModalProps) => {
-  const {
-    tokensList,
-    tokens,
-    accountAddress,
-    chainId,
-    // updateBalances,
-    balances,
-  } = useContext(WagmiContext) as IWagmiContext;
+  const { tokensList, tokens, balances } = useContext(
+    WagmiContext
+  ) as IWagmiContext;
   const [, setSearchParams] = React.useState('');
   const [, startTransition] = React.useTransition();
 
@@ -67,10 +62,6 @@ const SelectTokenModal = ({
 
     onClose();
   };
-
-  useEffect(() => {
-    // updateBalances(Object.keys(tokens) as Address[]);
-  }, [accountAddress, chainId]);
 
   return (
     <Modal

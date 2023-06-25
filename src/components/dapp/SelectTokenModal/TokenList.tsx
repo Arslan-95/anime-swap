@@ -4,6 +4,7 @@ import Token from '@utils/classes/Token';
 import { IBalances } from '@services/types';
 import { CustomButton, ScrollBlock } from '@components/ui';
 import { TokenIcon } from '..';
+import { getFixedNumber } from '@utils/numbers';
 
 interface ITokensListProps {
   selectedToken?: Token | null;
@@ -89,7 +90,11 @@ const TokenList = ({
                       <span>{token.name}</span>
                     </STokenTitles>
                   </STokenDetails>
-                  <STokenBalance>{balances[token.address] || 0}</STokenBalance>
+                  <STokenBalance>
+                    {balances[token.address]
+                      ? getFixedNumber(balances[token.address], 5)
+                      : 0}
+                  </STokenBalance>
                 </STokenItem>
               </li>
             );

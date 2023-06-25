@@ -1,6 +1,7 @@
 import Token from '@utils/classes/Token';
 import { Address } from 'wagmi';
 import { SendTransactionResult } from '@wagmi/core';
+import { LOADING_STATUS } from '@utils/types';
 
 export interface I1InchTx {
   data: Address;
@@ -81,4 +82,5 @@ export interface IWagmiContext {
   tokensList: Token[];
   updateBalances: (entryTokens: Address[]) => Promise<void>;
   balances: IBalances;
+  balancesLoading: LOADING_STATUS;
 }

@@ -13,6 +13,7 @@ import {
 } from '@services/types';
 import { DEFAULT_CHAIN, DEFAULT_TOKEN_ADDRESS } from '@services/config';
 import _ from 'lodash';
+import { LOADING_STATUS } from '@utils/types';
 
 interface IWagmiProviderProps {
   children?: React.ReactNode;
@@ -31,6 +32,9 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const [balances, setBalances] = useState<{
     [address: string]: string;
   }>({});
+  const [balancesLoading, setBalancesLoading] = useState<LOADING_STATUS>(
+    LOADING_STATUS.IDLE
+  );
   const tokensList = useMemo(() => Object.values(tokens), [tokens]);
 
   const updateBalances = async (entryTokens: Address[]) => {
@@ -111,6 +115,10 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
       const updatedTokens = await inchApi.getTokens(chain?.id || DEFAULT_CHAIN);
 
       setTokens(updatedTokens);
+
+      setBalancesLoading(LOADING_STATUS.LOADING);
+      await updateBalances(Object.keys(updatedTokens) as Address[]);
+      setBalancesLoading(LOADING_STATUS.LOADED);
     } catch (error) {
       console.log('[updateTokens]', error);
     }
@@ -119,6 +127,7 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   // Clear tokens and balances
   useEffect(() => {
     setBalances({});
+    setBalancesLoading(LOADING_STATUS.IDLE);
   }, [accountAddress, chain]);
 
   useEffect(() => {
@@ -138,6 +147,7 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
         tokensList,
         updateBalances,
         balances,
+        balancesLoading,
       }}
     >
       {children}
