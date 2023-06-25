@@ -65,11 +65,10 @@ const CommonTokens = ({
         <ScrollBlock>
           <STokensList>
             {tokens.map((token) => (
-              <li>
+              <li key={token.address}>
                 <SCommonToken
                   disabled={selectedToken?.address === token.address}
                   data-address={token.address}
-                  key={token.address}
                   onClick={onChange}
                 >
                   <TokenIcon src={token.logoURI} size={24} />

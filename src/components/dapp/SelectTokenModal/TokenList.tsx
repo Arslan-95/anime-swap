@@ -80,12 +80,8 @@ const TokenList = ({
         <ul>
           {list.map((token) => {
             return (
-              <li>
-                <STokenItem
-                  key={token.address}
-                  data-address={token.address}
-                  onClick={onChange}
-                >
+              <li key={token.address}>
+                <STokenItem data-address={token.address} onClick={onChange}>
                   <STokenDetails>
                     <TokenIcon size={24} src={token.logoURI} />
                     <STokenTitles>
