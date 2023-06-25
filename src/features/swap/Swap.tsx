@@ -20,8 +20,10 @@ type Props = {
 const SwapBox = styled(Box)`
   display: flex;
   flex-direction: column;
+
   width: 100%;
   max-width: 500px;
+  margin: 0 auto;
 
   h2 {
     text-align: center;
@@ -64,10 +66,10 @@ const Swap: React.FC<Props> = () => {
     approve,
     switchTokens,
     swapRate,
-    fromTokenBalance,
   } = useSwap();
 
   const showApproveButton = !isApproved && fromAmount;
+  const fromTokenBalance = fromToken?.balance;
 
   const handleBalanceClick = () => {
     if (!fromTokenBalance) return;

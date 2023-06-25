@@ -29,7 +29,7 @@ const SButton = styled.button<IButton>`
   background: #282828;
   border-left: 3px solid ${({ theme }) => theme.colors.main};
   border-right: 3px solid ${({ theme }) => theme.colors.main};
-  transition: 0.5s all, 0.2s border;
+  transition: 1s all, 0.2s border;
   font-family: PocketMonk;
   cursor: pointer;
 
@@ -43,6 +43,7 @@ const SButton = styled.button<IButton>`
     background: ${({ theme }) => theme.colors.main};
     color: ${({ theme }) => theme.colors.dark};
     box-shadow: 0px 0px 10px ${({ theme }) => theme.colors.main};
+    transition: 0.5s all, 0.2s border;
   }
 
   &:disabled {

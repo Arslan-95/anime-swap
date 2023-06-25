@@ -9,6 +9,7 @@ import { getQuote, getSwapData } from '@services/1inch/api';
 import { AxiosError } from 'axios';
 import { formatEther, parseEther } from 'viem';
 import { LOADING_STATUS } from '@utils/types';
+import _ from 'lodash';
 
 type HandleTokenChange = (token: Token | null) => void;
 type HandleAmountChange = (amount: string) => void;
@@ -31,10 +32,9 @@ const useSwap = () => {
     swapRate,
   } = useAppSelector((state) => state.swap);
   const context = useContext(WagmiContext) as IWagmiContext;
-  const { tokensList, tokens, updateBalances, balances } = context;
+  const { tokensList, tokens, updateBalances } = context;
   const { chain } = useNetwork();
 
-  const fromTokenBalance = fromToken && balances[fromToken.address];
   const fromAmountWei = useMemo(() => {
     return parseEther(`${Number(fromAmount)}`, 'wei').toString();
   }, [fromAmount]);
@@ -183,8 +183,13 @@ const useSwap = () => {
     const updatedFromToken = fromToken?.address && tokens[fromToken.address];
     const updatedToToken = toToken?.address && tokens[toToken.address];
 
-    handleFromTokenChange(updatedFromToken || tokensList[0] || null);
-    handleToTokenChange(updatedToToken || tokensList[1] || null);
+    if (!_.isEqual(fromToken, updatedFromToken)) {
+      handleFromTokenChange(updatedFromToken || tokensList[0] || null);
+    }
+
+    if (!_.isEqual(toToken, updatedToToken)) {
+      handleToTokenChange(updatedToToken || tokensList[1] || null);
+    }
   }, [tokensList]);
 
   useEffect(() => {
@@ -218,7 +223,6 @@ const useSwap = () => {
     approve,
     loading,
     switchTokens,
-    fromTokenBalance,
     swapRate,
     error,
   };

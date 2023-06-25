@@ -1,20 +1,22 @@
 import { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import Token from '@utils/classes/Token';
-import { IBalances } from '@services/types';
-import { CustomButton } from '@components/ui';
+import { CustomButton, ScrollBlock } from '@components/ui';
 import { TokenIcon } from '..';
+import { getFixedNumber } from '@utils/numbers';
 
 interface ITokensListProps {
   selectedToken?: Token | null;
   onChange?: MouseEventHandler<HTMLButtonElement>;
-  balances: IBalances;
   list: Token[];
+  maxHeight?: number;
 }
 
 const STokenList = styled.div`
-  max-height: 340px;
-  overflow: hidden auto;
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
 `;
 
 const STokenItem = styled(CustomButton)`
@@ -63,27 +65,31 @@ const STokenBalance = styled.span`
   font-size: 14px;
 `;
 
-const TokenList = ({ list, balances, onChange }: ITokensListProps) => {
+const TokenList = ({ list, onChange, maxHeight }: ITokensListProps) => {
   return (
     <STokenList>
-      {list.map((token) => {
-        return (
-          <STokenItem
-            key={token.address}
-            data-address={token.address}
-            onClick={onChange}
-          >
-            <STokenDetails>
-              <TokenIcon size={24} src={token.logoURI} />
-              <STokenTitles>
-                <span>{token.symbol}</span>
-                <span>{token.name}</span>
-              </STokenTitles>
-            </STokenDetails>
-            <STokenBalance>{balances[token.address] || 0}</STokenBalance>
-          </STokenItem>
-        );
-      })}
+      <ScrollBlock maxHeight={maxHeight}>
+        <ul>
+          {list.map((token) => {
+            return (
+              <li key={token.address}>
+                <STokenItem data-address={token.address} onClick={onChange}>
+                  <STokenDetails>
+                    <TokenIcon size={24} src={token.logoURI} />
+                    <STokenTitles>
+                      <span>{token.symbol}</span>
+                      <span>{token.name}</span>
+                    </STokenTitles>
+                  </STokenDetails>
+                  <STokenBalance>
+                    {token.balance ? getFixedNumber(token.balance, 5) : 0}
+                  </STokenBalance>
+                </STokenItem>
+              </li>
+            );
+          })}
+        </ul>
+      </ScrollBlock>
     </STokenList>
   );
 };

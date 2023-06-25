@@ -62,6 +62,13 @@ const SContent = styled(motion.div)`
   position: relative;
   overflow-y: auto;
   z-index: 2;
+
+  // Scrollbar
+  scrollbar-width: 0;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const STitle = styled.div`

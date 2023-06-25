@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Swap from '@pages/Swap';
 import * as PAGES from '@pages/PAGES';
 import Theme from '@styles/Theme';
@@ -10,6 +10,14 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Theme>
         <Routes>
+          <Route
+            path="/"
+            element={
+              <div>
+                <Link to={PAGES.SWAP}>SWAP</Link>
+              </div>
+            }
+          />
           <Route path={PAGES.DAPP} element={<Dapp />}>
             <Route path={PAGES.SWAP} element={<Swap />} />
           </Route>
