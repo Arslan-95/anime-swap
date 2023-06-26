@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { breakpoints } from '@features/adaptive/breakpoints';
 
 interface SContainerProps {
   maxWidth?: string;
@@ -15,14 +16,18 @@ const SContainer = styled.div<SContainerProps>`
   max-width: ${(props) => `calc(${props.maxWidth} + ${props.padding} * 2)`};
   width: 100%;
   margin: 0 auto;
-  padding: 0 ${(props) => props.padding};
+  padding: 0 ${(props) => props.padding || '30px'};
+
+  @media ${breakpoints.tablet} {
+    padding: 0 ${(props) => props.padding || '15px'};
+  }
 `;
 
 const Container: React.FC<Props> = ({
   children,
   className,
   maxWidth = '1320px',
-  padding = '30px',
+  padding,
 }) => {
   return (
     <SContainer padding={padding} maxWidth={maxWidth} className={className}>

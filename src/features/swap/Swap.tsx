@@ -26,6 +26,7 @@ const SwapBox = styled(Box)`
   margin: 0 auto;
 
   h2 {
+    margin-bottom: 38px;
     text-align: center;
   }
 `;
