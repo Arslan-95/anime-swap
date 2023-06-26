@@ -5,6 +5,7 @@ import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/',
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, './src/assets/'),
