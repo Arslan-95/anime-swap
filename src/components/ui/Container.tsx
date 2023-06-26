@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints } from '@features/adaptive/breakpoints';
+import { mediaBreakpoints } from '@features/adaptive/breakpoints';
 
 interface SContainerProps {
   maxWidth?: string;
@@ -18,7 +18,7 @@ const SContainer = styled.div<SContainerProps>`
   margin: 0 auto;
   padding: 0 ${(props) => props.padding || '30px'};
 
-  @media ${breakpoints.tablet} {
+  @media ${mediaBreakpoints.tablet} {
     padding: 0 ${(props) => props.padding || '15px'};
   }
 `;

@@ -1,16 +1,16 @@
 const maxWidth = (size: number) => `(max-width: ${size}px)`;
 
-const sizes = {
+export const sizes = {
   mobileXS: 320,
   mobileS: 375,
   mobileM: 425,
   mobileL: 768,
   tablet: 1024,
   laptop: 1440,
-  desktop: 2560,
+  desktop: 1920,
 };
 
-export const breakpoints = {
+export const mediaBreakpoints = {
   mobileXS: maxWidth(sizes.mobileXS),
   mobileS: maxWidth(sizes.mobileS),
   mobileM: maxWidth(sizes.mobileM),

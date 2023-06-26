@@ -1,4 +1,4 @@
-import { breakpoints } from '@features/adaptive/breakpoints';
+import { mediaBreakpoints } from '@features/adaptive/breakpoints';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +12,7 @@ const SBox = styled.div`
   border-radius: 53px;
   padding: 30px 40px;
 
-  @media ${breakpoints.tablet} {
+  @media ${mediaBreakpoints.tablet} {
     padding: 30px 20px;
     border-radius: 32px;
   }
