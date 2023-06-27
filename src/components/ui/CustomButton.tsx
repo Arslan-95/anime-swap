@@ -35,9 +35,11 @@ const CustomButton = ({
   commonEffects = false,
   disabled,
   buttonType = 'button',
+  ...otherProps
 }: ICustomButtonProps & IButton) => {
   return (
     <SCustomButton
+      {...otherProps}
       onClick={onClick}
       commonEffects={commonEffects}
       disabled={disabled}
