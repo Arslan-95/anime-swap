@@ -6,6 +6,7 @@ import selectAngleIcon from '@assets/icons/select-angle.svg';
 import { SelectTokenModal } from '.';
 import { CustomButton } from '@components/ui';
 import TokenIcon from './TokenIcon';
+import { useAppSelector } from '@hooks/index';
 
 interface CurrencySelectProps {
   token: Token | null;
@@ -37,7 +38,9 @@ const SSelectAngleIcon = styled.img`
 `;
 
 const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
+  const isDesktop = useAppSelector((state) => state.adaptive.isDesktop);
   const [isModal, setIsModal] = React.useState(false);
+  const iconSize = isDesktop ? 37 : 30;
 
   const closeModal = () => {
     setIsModal(false);
@@ -48,12 +51,12 @@ const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
       <SCurrencySelect onClick={() => setIsModal(true)}>
         {token ? (
           <>
-            <TokenIcon src={token.logoURI} />
+            <TokenIcon size={iconSize} src={token.logoURI} />
             <STokenSymbol>{token.symbol}</STokenSymbol>
           </>
         ) : (
           <>
-            <TokenIcon />
+            <TokenIcon size={iconSize} />
             <STokenSymbol>Empty</STokenSymbol>
           </>
         )}

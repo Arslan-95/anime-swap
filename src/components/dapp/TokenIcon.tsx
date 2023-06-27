@@ -49,7 +49,11 @@ const TokenIcon = memo(({ src, size = 37 }: ITokenIconProps) => {
   };
 
   return (
-    <SIconWrapper size={size} imageIsVisible={isSuccessed} ref={wrapperRef}>
+    <SIconWrapper
+      size={size}
+      imageIsVisible={!isFailed && isSuccessed}
+      ref={wrapperRef}
+    >
       {(isSuccessed || isInViewport) && !isFailed && (
         <img
           height={size}
