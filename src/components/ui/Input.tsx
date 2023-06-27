@@ -33,7 +33,7 @@ const SInputWrapper = styled.div<SInputWrapperProps>`
   transition: box-shadow 0.3s;
 
   input {
-    flex: 1 1 auto;
+    width: 100%;
     border: none;
     background: none;
     outline: none;

@@ -5,10 +5,11 @@ import logo from '@assets/logo.png';
 import menuIcon from '@assets/header-menu.svg';
 import Container from '@/components/ui/Container';
 import * as PAGES from '@pages/PAGES';
-import { Button } from '@components/ui';
-import { useConnect } from 'wagmi';
 import { WagmiContext } from '@services/web3/WagmiProvider';
 import { IWagmiContext } from '@services/types';
+import { ConnectWalletButton } from '@components/dapp';
+import { useAppSelector } from '@hooks/index';
+import { getShortAddress } from '@utils/web3';
 
 const SHeader = styled.header`
   width: 100%;
@@ -51,17 +52,26 @@ const SRightSide = styled.div`
   margin-left: auto;
 `;
 
-const SConnectButton = styled(Button)`
+const SConnectButton = styled(ConnectWalletButton)`
   margin-left: auto;
   margin-right: 20px;
 `;
 
 const Header: React.FC = () => {
-  const { connect, connectors, isLoading } = useConnect();
   const { accountAddress, isConnected } = useContext(
     WagmiContext
   ) as IWagmiContext;
-  const metaMaskConnector = connectors.find(({ id }) => id === 'metaMask');
+  const isDesktop = useAppSelector(({ adaptive }) => adaptive.isDesktop);
+
+  const walletData =
+    isConnected && accountAddress ? (
+      <h4>{getShortAddress(accountAddress)}</h4>
+    ) : (
+      <SConnectButton
+        title="Connect to wallet"
+        connectorId={isDesktop ? 'metaMask' : 'walletConnect'}
+      />
+    );
 
   return (
     <SHeader>
@@ -72,17 +82,7 @@ const Header: React.FC = () => {
             <span>Anime Swap</span>
           </SLogo>
           <SRightSide>
-            {isConnected && accountAddress ? (
-              <h4>{accountAddress}</h4>
-            ) : (
-              <SConnectButton
-                size="small"
-                onClick={() => connect({ connector: metaMaskConnector })}
-                disabled={isLoading || isConnected}
-              >
-                Connect to MetaMask
-              </SConnectButton>
-            )}
+            {isDesktop && walletData}
             <button>
               <img src={menuIcon} height="41px" alt="menu" loading="lazy" />
             </button>

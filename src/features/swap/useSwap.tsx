@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import { formatEther, parseEther } from 'viem';
 import { LOADING_STATUS } from '@utils/types';
 import _ from 'lodash';
+import { DEFAULT_CHAIN } from '@services/config';
 
 type HandleTokenChange = (token: Token | null) => void;
 type HandleAmountChange = (amount: string) => void;
@@ -78,8 +79,6 @@ const useSwap = () => {
   };
 
   const updateTransaction = async (params: WagmiProviderSwapParams) => {
-    if (!context.accountAddress || !chain) return null;
-
     // Clear error.
     dispatch(actions.setError(null));
     dispatch(actions.setTransaction(null));
@@ -93,7 +92,7 @@ const useSwap = () => {
 
       const quote = await getQuote({
         ...params,
-        chainId: chain.id,
+        chainId: chain?.id || DEFAULT_CHAIN,
       });
 
       const toTokenAmountInEther = formatEther(
@@ -188,7 +187,7 @@ const useSwap = () => {
     }
 
     if (!_.isEqual(toToken, updatedToToken)) {
-      handleToTokenChange(updatedToToken || tokensList[1] || null);
+      handleToTokenChange(updatedToToken || tokensList[3] || null);
     }
   }, [tokensList]);
 
@@ -225,6 +224,7 @@ const useSwap = () => {
     switchTokens,
     swapRate,
     error,
+    context,
   };
 };
 

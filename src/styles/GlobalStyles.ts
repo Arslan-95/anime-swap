@@ -14,6 +14,10 @@ export const GlobalStyle = createGlobalStyle<{ isDappPage: boolean }>`
         : theme.colors.landingBackground};
     color: ${(props) => props.theme.colors.defaultText};
     font-size: ${(props) => props.theme.fontSizes.small};
+
+    &.modal {
+      overflow: hidden;
+    }
   }
 
   *, *::before, *::after {

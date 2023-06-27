@@ -1,3 +1,4 @@
+import { mediaBreakpoints } from '@features/adaptive/breakpoints';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +11,11 @@ const SBox = styled.div`
   background: #141414;
   border-radius: 53px;
   padding: 30px 40px;
+
+  @media ${mediaBreakpoints.tablet} {
+    padding: 30px 20px;
+    border-radius: 32px;
+  }
 `;
 
 const Box: React.FC<Props> = ({ children, className }) => {
