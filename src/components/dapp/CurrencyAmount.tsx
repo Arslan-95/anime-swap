@@ -27,12 +27,12 @@ const CurrencyAmount = ({
   return (
     <SCurrencyAmount>
       <AmountInput
+        {...otherProps}
         value={value}
         onChange={onChange}
         indicator={<CurrencySelect token={token} onChange={onTokenChange} />}
         onFocus={onFocus}
         locked={inputLocked}
-        {...otherProps}
       />
     </SCurrencyAmount>
   );

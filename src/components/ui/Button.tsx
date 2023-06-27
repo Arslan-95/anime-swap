@@ -56,9 +56,11 @@ const Button = ({
   disabled,
   size,
   buttonType = 'button',
+  ...otherProps
 }: IButton) => {
   return (
     <SButton
+      {...otherProps}
       className={className}
       onClick={onClick}
       disabled={disabled}
