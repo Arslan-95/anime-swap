@@ -15,6 +15,7 @@ export interface InputProps {
   onFocus?: () => void;
   locked?: boolean;
   wrapperColor?: keyof IColors;
+  autoFocus?: boolean;
 }
 
 export type { IModalProps } from './Modal.tsx';

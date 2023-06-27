@@ -66,6 +66,7 @@ const Input: React.FC<InputProps> = ({
   indicator,
   locked,
   wrapperColor = 'main',
+  autoFocus,
 }) => {
   const [focused, setFocused] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -133,6 +134,7 @@ const Input: React.FC<InputProps> = ({
         onBlur={handleBlur}
         ref={inputRef}
         disabled={locked}
+        autoFocus={autoFocus}
       />
       <SIndicatorWrapper ref={indicatorWrapper}>{indicator}</SIndicatorWrapper>
     </SInputWrapper>
