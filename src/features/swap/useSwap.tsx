@@ -91,7 +91,7 @@ const useSwap = () => {
 
     try {
       if (!fromAmount) {
-        handleToAmountChange('0');
+        handleToAmountChange('');
         return;
       }
 

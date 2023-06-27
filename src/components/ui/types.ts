@@ -1,5 +1,7 @@
+import { ReactNode, MouseEventHandler, ButtonHTMLAttributes } from 'react';
 import { IColors } from '@features/theme/types.ts';
-import { ReactNode } from 'react';
+
+export type Sizes = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
 
 export type InputValue = string;
 
@@ -13,6 +15,16 @@ export interface InputProps {
   onFocus?: () => void;
   locked?: boolean;
   wrapperColor?: keyof IColors;
+  autoFocus?: boolean;
 }
 
 export type { IModalProps } from './Modal.tsx';
+
+export interface IButton {
+  className?: string;
+  children?: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  size?: Sizes;
+  buttonType?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
+}

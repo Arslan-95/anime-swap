@@ -76,7 +76,7 @@ const SelectToken = ({
 
   return (
     <SModalContent>
-      <SSearch onChange={handleSearch} wrapperColor="light" />
+      <SSearch autoFocus onChange={handleSearch} wrapperColor="light" />
       <SCommonTokens
         tokens={tokensList.slice(0, 5)}
         selectedToken={selectedToken}

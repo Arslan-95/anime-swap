@@ -1,10 +1,11 @@
 import React from 'react';
 import { CustomButton } from '.';
 import styled from 'styled-components';
+import { IButton, Sizes } from './types';
 
 interface IUnderlinedButtonProps {
   children?: React.ReactNode;
-  size: 'xsmall' | 'small';
+  size: Sizes;
   className?: string;
   onClick: () => void;
 }
@@ -28,9 +29,15 @@ const UnderlinedButton = ({
   size = 'small',
   className,
   onClick,
-}: IUnderlinedButtonProps) => {
+  ...otherProps
+}: IUnderlinedButtonProps & IButton) => {
   return (
-    <SUnderlinedButton onClick={onClick} className={className} size={size}>
+    <SUnderlinedButton
+      {...otherProps}
+      onClick={onClick}
+      className={className}
+      size={size}
+    >
       {children}
     </SUnderlinedButton>
   );
