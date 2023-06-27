@@ -22,6 +22,7 @@ const CurrencyAmount = ({
   onTokenChange,
   onFocus,
   inputLocked,
+  ...otherProps
 }: CurrencyAmountProps) => {
   return (
     <SCurrencyAmount>
@@ -31,6 +32,7 @@ const CurrencyAmount = ({
         indicator={<CurrencySelect token={token} onChange={onTokenChange} />}
         onFocus={onFocus}
         locked={inputLocked}
+        {...otherProps}
       />
     </SCurrencyAmount>
   );

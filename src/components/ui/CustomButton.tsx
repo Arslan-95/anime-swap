@@ -1,5 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
+import { IButton } from './types';
 
 interface ICustomButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -33,15 +34,15 @@ const CustomButton = ({
   className,
   commonEffects = false,
   disabled,
-  ...otherProps
-}: ICustomButtonProps) => {
+  buttonType = 'button',
+}: ICustomButtonProps & IButton) => {
   return (
     <SCustomButton
-      {...otherProps}
       onClick={onClick}
       commonEffects={commonEffects}
       disabled={disabled}
       className={className}
+      type={buttonType}
     >
       {children}
     </SCustomButton>

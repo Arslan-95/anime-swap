@@ -1,11 +1,11 @@
 import { getFixedNumber } from '@utils/numbers';
 
-interface INumberProps {
+interface INumberFormatProps {
   number: number | string;
   symbol?: string;
 }
 
-const Number = ({ number, symbol }: INumberProps) => {
+const NumberFormat = ({ number, symbol }: INumberFormatProps) => {
   return (
     <span>
       {getFixedNumber(number, 2)}&nbsp;
@@ -14,4 +14,4 @@ const Number = ({ number, symbol }: INumberProps) => {
   );
 };
 
-export default Number;
+export default NumberFormat;

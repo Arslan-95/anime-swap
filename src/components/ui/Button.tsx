@@ -1,15 +1,8 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
-
-interface IButton {
-  className?: string;
-  children?: React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-  size?: 'small' | 'medium';
-}
+import { IButton } from './types';
 
 const buttonSizeStyles = {
+  xsmall: css``,
   small: css`
     padding: 12px;
     font-size: 18px;
@@ -18,6 +11,8 @@ const buttonSizeStyles = {
     padding: 12px;
     font-size: 24px;
   `,
+  large: css``,
+  xlarge: css``,
 };
 
 const SButton = styled.button<IButton>`
@@ -34,7 +29,7 @@ const SButton = styled.button<IButton>`
   user-select: none;
   cursor: pointer;
 
-  ${({ size }) => buttonSizeStyles[size || 'medium']}
+  ${({ size }) => buttonSizeStyles[size || 'small']}
 
   &:hover {
     border-color: transparent;
@@ -44,7 +39,7 @@ const SButton = styled.button<IButton>`
     background: ${({ theme }) => theme.colors.main};
     color: ${({ theme }) => theme.colors.dark};
     box-shadow: 0px 0px 10px ${({ theme }) => theme.colors.main};
-    transition: 0.5s all, 0.2s border;
+    transition: 0.2s all, 0.2s border;
   }
 
   &:disabled {
@@ -54,13 +49,21 @@ const SButton = styled.button<IButton>`
   }
 `;
 
-const Button = ({ className, children, onClick, disabled, size }: IButton) => {
+const Button = ({
+  className,
+  children,
+  onClick,
+  disabled,
+  size,
+  buttonType = 'button',
+}: IButton) => {
   return (
     <SButton
       className={className}
       onClick={onClick}
       disabled={disabled}
       size={size}
+      type={buttonType}
     >
       {children}
     </SButton>
