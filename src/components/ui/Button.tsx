@@ -31,6 +31,7 @@ const SButton = styled.button<IButton>`
   border-right: 3px solid ${({ theme }) => theme.colors.main};
   transition: 1s all, 0.2s border;
   font-family: PocketMonk;
+  user-select: none;
   cursor: pointer;
 
   ${({ size }) => buttonSizeStyles[size || 'medium']}

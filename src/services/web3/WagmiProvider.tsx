@@ -34,6 +34,8 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
   const tokensList = useMemo(() => Object.values(tokens), [tokens]);
 
   const updateBalances = async (entryTokens: Address[]) => {
+    if (!isConnected) return;
+
     const updatedBalances: { [address: string]: string } = {};
     const updatedTokens: I1InchTokensData = {};
 

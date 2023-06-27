@@ -1,9 +1,11 @@
-import swapSlice from '@features/swap/swapSlice';
 import { configureStore } from '@reduxjs/toolkit';
+import adaptiveSlice from '@features/adaptive/adaptiveSlice';
+import swapSlice from '@features/swap/swapSlice';
 
 export const store = configureStore({
   reducer: {
     swap: swapSlice,
+    adaptive: adaptiveSlice,
   },
 });
 

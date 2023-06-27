@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   Box,
   Button,
@@ -12,6 +12,8 @@ import useSwap from './useSwap';
 import { ReactComponent as SwitchIcon } from '@assets/icons/switch-kunai.svg';
 import { LOADING_STATUS } from '@utils/types';
 import _ from 'lodash';
+import { ConnectWalletButton } from '@components/dapp';
+import { useAppSelector } from '@hooks/index';
 
 type Props = {
   children?: React.ReactNode;
@@ -26,6 +28,7 @@ const SwapBox = styled(Box)`
   margin: 0 auto;
 
   h2 {
+    margin-bottom: 38px;
     text-align: center;
   }
 `;
@@ -44,12 +47,20 @@ const STokenPrice = styled.span`
   font-weight: 500;
 `;
 
-const ActionButton = styled(Button)`
+const actionButtonCss = css`
   width: 180px;
   margin: 30px auto 0;
 `;
 
+const ActionButton = styled(Button)`
+  ${actionButtonCss}
+`;
+const SConnectWalletButton = styled(ConnectWalletButton)`
+  ${actionButtonCss}
+`;
+
 const Swap: React.FC<Props> = () => {
+  const isDesktop = useAppSelector(({ adaptive }) => adaptive.isDesktop);
   const {
     fromToken,
     toToken,
@@ -66,6 +77,7 @@ const Swap: React.FC<Props> = () => {
     approve,
     switchTokens,
     swapRate,
+    context,
   } = useSwap();
 
   const showApproveButton = !isApproved && fromAmount;
@@ -75,6 +87,37 @@ const Swap: React.FC<Props> = () => {
     if (!fromTokenBalance) return;
 
     handleAmountChange(fromTokenBalance);
+  };
+
+  const actionButtonRender = () => {
+    if (!context.isConnected) {
+      return (
+        <SConnectWalletButton
+          title="Connect to wallet"
+          connectorId={isDesktop ? 'metaMask' : 'walletConnect'}
+        />
+      );
+    }
+
+    if (showApproveButton) {
+      return (
+        <ActionButton
+          onClick={approve}
+          disabled={loading === LOADING_STATUS.LOADING}
+        >
+          Approve
+        </ActionButton>
+      );
+    }
+
+    return (
+      <ActionButton
+        disabled={!transaction || loading === LOADING_STATUS.LOADING}
+        onClick={swap}
+      >
+        Swap
+      </ActionButton>
+    );
   };
 
   return (
@@ -109,21 +152,7 @@ const Swap: React.FC<Props> = () => {
         &nbsp;per&nbsp;
         {toToken?.symbol}
       </STokenPrice>
-      {showApproveButton ? (
-        <ActionButton
-          onClick={approve}
-          disabled={loading === LOADING_STATUS.LOADING}
-        >
-          Approve
-        </ActionButton>
-      ) : (
-        <ActionButton
-          disabled={!transaction || loading === LOADING_STATUS.LOADING}
-          onClick={swap}
-        >
-          Swap
-        </ActionButton>
-      )}
+      {actionButtonRender()}
     </SwapBox>
   );
 };

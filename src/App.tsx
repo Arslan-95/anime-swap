@@ -4,8 +4,11 @@ import Swap from '@pages/Swap';
 import * as PAGES from '@pages/PAGES';
 import Theme from '@styles/Theme';
 import Dapp from '@layouts/Dapp';
+import useAdaptive from '@features/adaptive/useAdaptive';
 
 const App: React.FC = () => {
+  useAdaptive();
+
   return (
     <BrowserRouter>
       <Theme>
