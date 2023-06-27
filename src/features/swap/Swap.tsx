@@ -5,7 +5,8 @@ import {
   Button,
   CustomButton,
   UnderlinedButton,
-  Number,
+  NumberFormat,
+  Form,
 } from '@components/ui';
 import CurrencyAmount from '@components/dapp/CurrencyAmount';
 import useSwap from './useSwap';
@@ -20,9 +21,6 @@ type Props = {
 };
 
 const SwapBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
@@ -31,6 +29,12 @@ const SwapBox = styled(Box)`
     margin-bottom: 38px;
     text-align: center;
   }
+`;
+
+const SForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 const SwitchButton = styled(CustomButton)`
@@ -80,8 +84,12 @@ const Swap: React.FC<Props> = () => {
     context,
   } = useSwap();
 
-  const showApproveButton = !isApproved && fromAmount;
   const fromTokenBalance = fromToken?.balance;
+  const balanceIsGreater = Number(fromTokenBalance) >= Number(fromAmount);
+
+  const showApproveButton = !isApproved && fromAmount;
+  const isLoading = loading === LOADING_STATUS.LOADING;
+  const swapDisabled = !balanceIsGreater || !transaction || isLoading;
 
   const handleBalanceClick = () => {
     if (!fromTokenBalance) return;
@@ -95,6 +103,7 @@ const Swap: React.FC<Props> = () => {
         <SConnectWalletButton
           title="Connect to wallet"
           connectorId={isDesktop ? 'metaMask' : 'walletConnect'}
+          buttonType="submit"
         />
       );
     }
@@ -103,7 +112,8 @@ const Swap: React.FC<Props> = () => {
       return (
         <ActionButton
           onClick={approve}
-          disabled={loading === LOADING_STATUS.LOADING}
+          disabled={isLoading}
+          buttonType="submit"
         >
           Approve
         </ActionButton>
@@ -111,10 +121,7 @@ const Swap: React.FC<Props> = () => {
     }
 
     return (
-      <ActionButton
-        disabled={!transaction || loading === LOADING_STATUS.LOADING}
-        onClick={swap}
-      >
+      <ActionButton disabled={swapDisabled} onClick={swap} buttonType="submit">
         Swap
       </ActionButton>
     );
@@ -122,37 +129,42 @@ const Swap: React.FC<Props> = () => {
 
   return (
     <SwapBox>
-      <h2>SWAP</h2>
-      {_.isString(fromTokenBalance) && (
-        <SUnderlinedButton size="xsmall" onClick={handleBalanceClick}>
-          Balance:&nbsp;
-          <Number number={fromTokenBalance} symbol={fromToken?.symbol} />
-        </SUnderlinedButton>
-      )}
-      <CurrencyAmount
-        value={fromAmount}
-        onChange={handleAmountChange}
-        placeholder="0.00"
-        token={fromToken}
-        onTokenChange={handleFromTokenChange}
-        onFocus={handleFocusFrom}
-      />
-      <SwitchButton onClick={switchTokens} commonEffects>
-        <SwitchIcon />
-      </SwitchButton>
-      <CurrencyAmount
-        value={toAmount}
-        placeholder="0.00"
-        token={toToken}
-        onTokenChange={handleToTokenChange}
-        inputLocked
-      />
-      <STokenPrice>
-        <Number number={swapRate} symbol={fromToken?.symbol} />
-        &nbsp;per&nbsp;
-        {toToken?.symbol}
-      </STokenPrice>
-      {actionButtonRender()}
+      <SForm>
+        <h2>SWAP</h2>
+        {_.isString(fromTokenBalance) && (
+          <SUnderlinedButton size="xsmall" onClick={handleBalanceClick}>
+            Balance:&nbsp;
+            <NumberFormat
+              number={fromTokenBalance}
+              symbol={fromToken?.symbol}
+            />
+          </SUnderlinedButton>
+        )}
+        <CurrencyAmount
+          value={fromAmount}
+          onChange={handleAmountChange}
+          placeholder="0.00"
+          token={fromToken}
+          onTokenChange={handleFromTokenChange}
+          onFocus={handleFocusFrom}
+        />
+        <SwitchButton onClick={switchTokens} commonEffects>
+          <SwitchIcon />
+        </SwitchButton>
+        <CurrencyAmount
+          value={toAmount}
+          placeholder="0.00"
+          token={toToken}
+          onTokenChange={handleToTokenChange}
+          inputLocked
+        />
+        <STokenPrice>
+          <NumberFormat number={swapRate} symbol={fromToken?.symbol} />
+          &nbsp;per&nbsp;
+          {toToken?.symbol}
+        </STokenPrice>
+        {actionButtonRender()}
+      </SForm>
     </SwapBox>
   );
 };
