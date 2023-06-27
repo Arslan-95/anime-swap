@@ -40,7 +40,7 @@ const SSelectAngleIcon = styled.img`
 const CurrencySelect = ({ token, onChange }: CurrencySelectProps) => {
   const isDesktop = useAppSelector((state) => state.adaptive.isDesktop);
   const [isModal, setIsModal] = React.useState(false);
-  const iconSize = isDesktop ? 37 : 30;
+  const iconSize = isDesktop ? 37 : 25;
 
   const closeModal = () => {
     setIsModal(false);
