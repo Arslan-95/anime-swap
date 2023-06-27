@@ -37,7 +37,12 @@ const useSwap = () => {
   const { chain } = useNetwork();
 
   const fromAmountWei = useMemo(() => {
-    return parseEther(`${Number(fromAmount)}`, 'wei').toString();
+    const number =
+      Number(fromAmount) >= Number.MAX_SAFE_INTEGER
+        ? Number.MAX_SAFE_INTEGER
+        : Number(fromAmount);
+
+    return parseEther(`${Number(number)}`, 'wei').toString();
   }, [fromAmount]);
 
   const isApproved = allowance && Number(allowance) >= Number(fromAmountWei);
