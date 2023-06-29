@@ -14,6 +14,7 @@ import Token from '@utils/classes/Token';
 import CommonTokens from './CommonTokens';
 import TokenList from './TokenList';
 import { IModalProps } from '@components/ui/Modal';
+import { useAppSelector } from '@hooks/index';
 
 interface ISelectTokenProps {
   selectedToken?: Token | null;
@@ -42,6 +43,7 @@ const SelectToken = ({
   onClose,
 }: ISelectTokenProps) => {
   const { tokensList, tokens } = useContext(WagmiContext) as IWagmiContext;
+  const isDesktop = useAppSelector(({ adaptive }) => adaptive.isDesktop);
 
   const [searchParams, setSearchParams] = React.useState('');
   const defferedSearchParams = useDeferredValue(searchParams);
@@ -76,7 +78,11 @@ const SelectToken = ({
 
   return (
     <SModalContent>
-      <SSearch autoFocus onChange={handleSearch} wrapperColor="light" />
+      <SSearch
+        autoFocus={isDesktop}
+        onChange={handleSearch}
+        wrapperColor="light"
+      />
       <SCommonTokens
         tokens={tokensList.slice(0, 5)}
         selectedToken={selectedToken}
