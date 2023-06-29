@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useMemo } from 'react';
 import styled from 'styled-components';
 import Token from '@utils/classes/Token';
 import { CustomButton, ScrollBlock } from '@components/ui';
@@ -66,11 +66,16 @@ const STokenBalance = styled.span`
 `;
 
 const TokenList = ({ list, onChange, maxHeight }: ITokensListProps) => {
+  const sortedList = useMemo(
+    () => list.sort((a, b) => Number(b.balance) - Number(a.balance)),
+    [list]
+  );
+
   return (
     <STokenList>
       <ScrollBlock maxHeight={maxHeight}>
         <ul>
-          {list.map((token) => {
+          {sortedList.map((token) => {
             return (
               <li key={token.address}>
                 <STokenItem data-address={token.address} onClick={onChange}>
