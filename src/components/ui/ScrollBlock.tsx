@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface IScrollBlockProps {
   children?: ReactNode;
+  className?: string;
   maxHeight?: number;
 }
 
@@ -32,8 +33,12 @@ const SScrollBlock = styled.div<IScrollBlockProps>`
   }
 `;
 
-const ScrollBlock = ({ children, maxHeight }: IScrollBlockProps) => {
-  return <SScrollBlock maxHeight={maxHeight}>{children}</SScrollBlock>;
+const ScrollBlock = ({ children, maxHeight, className }: IScrollBlockProps) => {
+  return (
+    <SScrollBlock maxHeight={maxHeight} className={className}>
+      {children}
+    </SScrollBlock>
+  );
 };
 
 export default ScrollBlock;
