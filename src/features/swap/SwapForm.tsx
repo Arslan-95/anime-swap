@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import {
   Box,
@@ -16,14 +16,19 @@ import _ from 'lodash';
 import { ConnectWalletButton } from '@components/dapp';
 import { useAppSelector } from '@hooks/index';
 
-type Props = {
-  children?: React.ReactNode;
+type ISwapFormProps = {
+  className?: string;
+  children?: ReactNode;
 };
 
+const actionButtonCss = css`
+  width: 180px;
+  margin: 30px auto 0;
+`;
+
 const SwapBox = styled(Box)`
-  width: 100%;
+  width: auto;
   max-width: 500px;
-  margin: 0 auto;
 
   h2 {
     margin-bottom: 38px;
@@ -51,11 +56,6 @@ const STokenPrice = styled.span`
   font-weight: 500;
 `;
 
-const actionButtonCss = css`
-  width: 180px;
-  margin: 30px auto 0;
-`;
-
 const ActionButton = styled(Button)`
   ${actionButtonCss}
 `;
@@ -63,7 +63,7 @@ const SConnectWalletButton = styled(ConnectWalletButton)`
   ${actionButtonCss}
 `;
 
-const Swap: React.FC<Props> = () => {
+const SwapForm = ({ className }: ISwapFormProps) => {
   const isDesktop = useAppSelector(({ adaptive }) => adaptive.isDesktop);
   const {
     fromToken,
@@ -128,7 +128,7 @@ const Swap: React.FC<Props> = () => {
   };
 
   return (
-    <SwapBox>
+    <SwapBox className={className}>
       <SForm>
         <h2>SWAP</h2>
         {_.isString(fromTokenBalance) && (
@@ -169,4 +169,4 @@ const Swap: React.FC<Props> = () => {
   );
 };
 
-export default Swap;
+export default SwapForm;

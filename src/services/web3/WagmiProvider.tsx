@@ -132,6 +132,7 @@ const WagmiProvider = ({ children }: IWagmiProviderProps) => {
 
   // Clear tokens and balances
   useEffect(() => {
+    setTokens({});
     setBalancesLoading(LOADING_STATUS.IDLE);
   }, [accountAddress, chain]);
 
