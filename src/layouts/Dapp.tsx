@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import WagmiProvider from '@services/web3/WagmiProvider';
+import { mediaBreakpoints } from '@features/adaptive/breakpoints';
 
 const SDappWrapper = styled.div`
   overflow-x: hidden;
@@ -11,6 +12,10 @@ const SDappWrapper = styled.div`
 
 const SDappContent = styled.div`
   padding: 0 0 20px;
+
+  @media ${mediaBreakpoints.tablet} {
+    padding: 0 0 50px;
+  }
 `;
 
 const Dapp: React.FC = () => {
