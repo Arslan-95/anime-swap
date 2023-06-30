@@ -1,11 +1,11 @@
 import { useContext, useMemo, ReactNode } from 'react';
 import styled from 'styled-components';
-import { Box, NumberFormat, ScrollBlock } from '@components/ui';
+import { Box, ScrollBlock } from '@components/ui';
 import { WagmiContext } from '@services/web3/WagmiProvider';
 import { IWagmiContext } from '@services/types';
-import { TokenIcon } from '@components/dapp';
 import { LOADING_STATUS } from '@utils/types';
 import CircleLoading from '@components/ui/loadings/CircleLoading';
+import BalanceItem from './BalanceItem';
 
 type IBalancesProps = {
   className?: string;
@@ -35,26 +35,10 @@ const BalancesList = styled.ul`
   padding: 0;
 `;
 
-const BalancesItem = styled.li`
-  display: flex;
-  align-items: center;
-
-  padding: 13px 17px;
-  background: #282828;
-  border-radius: 12px;
-
-  & + & {
-    margin-top: 30px;
-  }
-
-  h5 {
-    margin-left: 11px;
-  }
-`;
-
 const SRelativeWrapper = styled.div`
   position: relative;
 `;
+
 const SCircleLoading = styled(CircleLoading)`
   position: absolute;
   top: -35px;
@@ -75,12 +59,7 @@ const Balances = ({ className }: IBalancesProps) => {
 
   const balancesRender = () =>
     filteredTokens.map((token) => (
-      <BalancesItem key={token.address}>
-        <TokenIcon src={token.logoURI} />
-        <h5>
-          <NumberFormat number={token.balance} symbol={token.symbol} />
-        </h5>
-      </BalancesItem>
+      <BalanceItem key={token.address} token={token} />
     ));
 
   const noDataRender = () => {
