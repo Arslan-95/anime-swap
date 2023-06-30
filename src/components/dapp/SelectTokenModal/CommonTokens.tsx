@@ -27,7 +27,7 @@ const STokensList = styled.ul`
   gap: 13px;
 
   padding: 0 0 8px;
-  list-style-type: none;
+  list-style: none;
 `;
 
 const SCommonToken = styled(CustomButton)`
